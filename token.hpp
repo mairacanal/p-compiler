@@ -3,25 +3,17 @@
 #include <istream>
 #include <string>
 
-#define get_token_type(c) #c
-
-enum TokenType
-{
-    simb_program,
-    id,
-    simb_pv,
-    simb_var,
-};
-
 class Token {
 private:
     std::string token;
-    TokenType type;
+    std::string type;
 
 public:
+    Token(std::string token, std::string type) : token{token}, type{type} {}
+
     friend auto operator<<(std::ostream& os, const Token& token) -> std::ostream&
     {
-        os << token << "," << get_token_type(token.type);
+        os << token.token << "," << token.type;
         return os;
     }
 };
