@@ -13,7 +13,7 @@ public:
 
     friend auto operator<<(std::ostream& os, const Token& token) -> std::ostream&
     {
-        os << token.value << "," << token.type;
+        os << token.value << ", " << token.type;
         return os;
     }
 };
