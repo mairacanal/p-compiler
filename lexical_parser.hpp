@@ -32,15 +32,22 @@ public:
 
     auto next(const char& c) -> std::optional<Token>
     {
-        std::cout << "char: " << c << std::endl;
-        std::cout << "current state: " << state << std::endl;
+        auto to_stack = states[state].add_to_stack(c);
+
+        std::cout << "current state: " << state << " char: " << c << std::endl;
 
         state = states[state][c];
         go_back = states[state].should_go_back();
 
+        std::cout << "new state: " << state << std::endl;
+        std::cout << std::endl;
+
         if (states[state].is_final_state()) {
             std::string value = stack;
             std::string type = states[state].get_output();
+
+            if (value.empty())
+                value = c;
 
             stack = "";
             state = 0;
@@ -50,7 +57,7 @@ public:
             return Token { value, type };
         }
 
-        if (c != ' ' && c != '\n' && c != '\t')
+        if (to_stack)
             stack += c;
 
         return {};

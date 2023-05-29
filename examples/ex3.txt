@@ -1,4 +1,4 @@
-om leimprime;
+program leimprime;
 {exemplo 2}
 var a: real;
 var b: integer;
