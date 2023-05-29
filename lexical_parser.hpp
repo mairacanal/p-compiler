@@ -8,8 +8,21 @@
 
 class LexicalParser {
 private:
-    unsigned int state;
+    unsigned int state = 0;
     std::string stack {};
+
+    auto get_reserved_symbol(const std::string& value, const std::string& type) -> std::string {
+        std::map<std::string, std::string> symbol_table = {
+            {"program", "simb_program"},
+            {"var", "simb_var"},
+            {"begin", "simb_begin"},
+        };
+
+        if (symbol_table.find(value) == symbol_table.end())
+            return type;
+        else
+            return symbol_table[value];
+    }
 
 public:
     auto next(const char& c) -> std::optional<Token>
@@ -20,15 +33,20 @@ public:
         state = states[state][c];
 
         if (states[state].is_final_state()) {
-            Token token { states[state].get_output(), stack };
+            std::string value = stack;
+            std::string type = states[state].get_output();
 
             stack = "";
             state = 0;
 
-            return token;
+            type = get_reserved_symbol(value, type);
+
+            return Token { value, type };
         }
 
-        stack += c;
+        if (c != ' ' && c != '\n' && c != '\t')
+            stack += c;
+
         return {};
     }
 };

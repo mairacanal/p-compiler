@@ -5,15 +5,15 @@
 
 class Token {
 private:
-    std::string token;
+    std::string value;
     std::string type;
 
 public:
-    Token(std::string token, std::string type) : token{token}, type{type} {}
+    Token(std::string value, std::string type) : value{value}, type{type} {}
 
     friend auto operator<<(std::ostream& os, const Token& token) -> std::ostream&
     {
-        os << token.type << "," << token.token;
+        os << token.value << "," << token.type;
         return os;
     }
 };
