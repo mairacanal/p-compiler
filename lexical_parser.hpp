@@ -9,6 +9,7 @@
 class LexicalParser {
 private:
     unsigned int state = 0;
+    bool go_back = false;
     std::string stack {};
 
     auto get_reserved_symbol(const std::string& value, const std::string& type) -> std::string {
@@ -25,12 +26,17 @@ private:
     }
 
 public:
+    auto should_go_back() {
+        return go_back;
+    }
+
     auto next(const char& c) -> std::optional<Token>
     {
         std::cout << "char: " << c << std::endl;
         std::cout << "current state: " << state << std::endl;
 
         state = states[state][c];
+        go_back = states[state].should_go_back();
 
         if (states[state].is_final_state()) {
             std::string value = stack;

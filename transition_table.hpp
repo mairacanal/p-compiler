@@ -5,7 +5,7 @@
 #include "state.hpp"
 
 std::map<unsigned int, State> states = {
-    { 0, { 0, false, "", {
+    { 0, { 0, false, false, "", {
                             { ' ', 0 },
                             { '\t', 0 },
                             { '\n', 0 },
@@ -82,7 +82,7 @@ std::map<unsigned int, State> states = {
                         } },
     },
 
-    { 1, { 1, false, "", {
+    { 1, { 1, false, false, "", {
                              { '0', 1 },
                              { '1', 1 },
                              { '2', 1 },
@@ -154,11 +154,11 @@ std::map<unsigned int, State> states = {
                              { '\n', 24 },
                          } } },
 
-    { 2, { 2, true, "erroNumber", {} } },
+    { 2, { 2, true, false, "erroNumber", {} } },
 
-    { 3, { 3, true, "integerNumber", {} } },
+    { 3, { 3, true, false, "integerNumber", {} } },
 
-    { 4, { 4, false, "", {
+    { 4, { 4, false, false, "", {
                              { '\0', 2 },
                              { '0', 5 },
                              { '1', 5 },
@@ -171,7 +171,7 @@ std::map<unsigned int, State> states = {
                              { '8', 5 },
                              { '9', 5 },
                          } } },
-    { 5, { 5, false, "", {
+    { 5, { 5, false, false, "", {
                              { '0', 5 },
                              { '1', 5 },
                              { '2', 5 },
@@ -186,7 +186,7 @@ std::map<unsigned int, State> states = {
 
                          } } },
 
-    { 19, { 19, false, "", {
+    { 19, { 19, false, false, "", {
                                { '0', 1 },
                                { '1', 1 },
                                { '2', 1 },
@@ -252,5 +252,5 @@ std::map<unsigned int, State> states = {
                                { '_', 19 },
                                { '\0', 20 },
                            } } },
-    { 20, { 20, true, "id", {} } },
+    { 20, { 20, true, true, "id", {} } },
 };

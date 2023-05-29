@@ -17,10 +17,12 @@ int main()
     file.open(filename);
 
     while (file >> std::noskipws >> c) {
-        std::optional<Token> token{};
+        do {
+            std::optional<Token> token{};
 
-        token = parser.next(c);
-        if (token)
-            std::cout << token.value() << std::endl;
+            token = parser.next(c);
+            if (token)
+                std::cout << token.value() << std::endl;
+        } while (parser.should_go_back());
     }
 }
