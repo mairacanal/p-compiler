@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include "lexicalParser.hpp"
+#include "lexical_parser.hpp"
 
 int main()
 {
@@ -19,7 +19,7 @@ int main()
     while (file >> std::noskipws >> c) {
         std::optional<Token> token{};
 
-        token = parser.read_char(c);
+        token = parser.next(c);
         if (token)
             std::cout << token.value() << std::endl;
     }
