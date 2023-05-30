@@ -34,7 +34,7 @@ std::map<unsigned int, State> states = {
              {'+', 32},         {'-', 33},          {':', 9},
              {'>', 10},         {'<', 11},          {'/', 21},
              {'_', 19},         {'*', 22},          {';', 39},
-             {'(', 36},         {',', 38},
+             {'(', 36},         {',', 38}, {'.', 44},
 
          },
      }},
@@ -195,9 +195,13 @@ std::map<unsigned int, State> states = {
     {32, {true, false, "positive", {}}},
     {33, {true, false, "negative", {}}},
 
-    {36, {true, false, "simb_apar", {}}},
+    {36, {true, false, "simb_lpar", {}}},
+
+    {36, {true, false, "simb_rpar", {}}},
 
     {38, {true, false, "simb_comma", {}}},
 
     {39, {true, false, "simb_semicolon", {}}},
+
+    {44, {true, false, "simb_dot", {}}},
 };
