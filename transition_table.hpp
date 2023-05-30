@@ -54,9 +54,9 @@ std::map<unsigned int, State> states = {
           {' ', 24}, {'\t', 24}, {'\n', 24},
       }}},
 
-    {2, {true, false, "erroNumber", {}}},
+    {2, {true, false, "error_number", {}}},
 
-    {3, {true, false, "integerNumber", {}}},
+    {3, {true, false, "integer_number", {}}},
 
     {4,
      {"",
@@ -87,8 +87,19 @@ std::map<unsigned int, State> states = {
           {'8', 5},
           {'9', 5},
           {'\0', 6},
+          {' ',{7, false}},
+          {'\t',{7, false}},
+          {'\n',{7, false}},
 
       }}},
+    
+    {6,
+     {"real_number",
+      {
+        {'+', 29},
+        {'-', 29},
+      }}},
+
 
     {7,
      {"",
@@ -97,6 +108,48 @@ std::map<unsigned int, State> states = {
           {'\n', {8, false}},
           {'\0', {7, false}},
       }}},
+
+    {8, {"comment_error"{}}},
+
+    {9
+     {" ",
+        {
+          {'=', 17},
+          {'\0', 18},
+
+     }}},
+
+    {10, 
+     {" " 
+        { 
+            {'\0', 13},
+            {'=', 14},
+
+        }}},
+
+    {11, 
+     {" " 
+        { 
+            {'\0', 12},
+            {'=', 15},
+            {'>', 16},
+
+
+        }}},
+
+    {12, {"lesser", {}}},
+
+    {13, {"greater", {}}},
+
+    {14, {"greater_equal", {}}},
+
+    {15, {"lesser_equal", {}}},
+
+    {16, {"diff", {}}},
+
+    {17, {"attribution", {}}},
+
+    {18, {"type_attribution", {}}},
 
     {19,
      {"",
@@ -114,6 +167,51 @@ std::map<unsigned int, State> states = {
           {'Y', 19}, {'Z', 19}, {'_', 19}, {'\0', 20},
       }}},
     {20, {true, true, "id", {}}},
+    
+    {21, {"divide", {}}},
+
+    {22, {"multiply", {}}},
+
+    {23, 
+     {"integer_number", 
+      {
+        {'\0', 28}
+    }}},
+
+    {24, 
+     {"integer_number", 
+      { {' ', 25},
+        {'\t', 25}
+        {'\n', 25}
+        {'-', 28},
+        {'+', 28}
+    }}},
+
+    {25, 
+     {" ", 
+      { {' ', 25},
+        {'\t', 25}
+        {'\n', 25}
+        {'-', 28},
+        {'+', 28}
+    }}},
+    
+    {26, {"signal", {}}},
+
+    {27, 
+     {"real_number", 
+      { {' ', 25},
+        {'\t', 25}
+        {'\n', 25}
+        {'-', 28},
+        {'+', 28}
+    }}},
+
+    {28, {"plus_minus_operation", {}}},
+
+    {29, {"signal", {}}},    
+    
+
 
     {34, {true, false, "simb_pv", {}}},
 };
