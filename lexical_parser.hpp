@@ -19,7 +19,11 @@ class LexicalParser {
         {"begin", "simb_begin"},     {"procedure", "simb_proc"},
         {"end", "simb_end"},         {"write", "simb_write"},
         {"read", "simb_read"},       {"while", "simb_while"},
-        {"do", "simb_do"},           {"integer", "simb_type"}};
+        {"do", "simb_do"},           {"to", "simb_to"},
+        {"integer", "simb_type"},    {"real", "simb_real"},
+        {"for", "simb_for"},         {"if", "simb_if"},
+        {"then", "simb_then"},       {"else", "simb_else"},
+    };
 
     if (symbol_table.find(value) == symbol_table.end())
       return type;
@@ -33,15 +37,10 @@ class LexicalParser {
   auto next(const char &c) -> std::optional<Token> {
     auto to_stack = states[state].add_to_stack(c);
 
-    std::cout << "current state: " << state << " char: " << c << std::endl;
-
     state = states[state][c];
     go_back = states[state].should_go_back();
 
     if (to_stack) stack += c;
-
-    std::cout << "new state: " << state << std::endl;
-    std::cout << std::endl;
 
     if (states[state].is_final_state()) {
       std::string value = stack;

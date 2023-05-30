@@ -11,11 +11,14 @@ int main() {
   std::ofstream output_file;
   char c;
 
-  std::cout << "Insira o nome do arquivo de entrada: ";
+  std::cout << "Insert the input filename: ";
   std::cin >> filename;
 
   file.open(filename);
   output_file.open("output.txt");
+
+  std::cout << "The lexical analyzer result is:" << std::endl;
+  std::cout << std::endl;
 
   while (file >> std::noskipws >> c) {
     do {
@@ -23,14 +26,13 @@ int main() {
 
       token = parser.next(c);
       if (token) {
-        // TODO: remove this
         std::cout << token.value() << std::endl;
-
         output_file << token.value() << std::endl;
-      }
+      };
     } while (parser.should_go_back());
   }
 
-  std::cout << "Output do analisador léxico salvo no arquivo output.txt"
+  std::cout << std::endl;
+  std::cout << "Output of the lexical analyzer was saved on the file output.txt."
             << std::endl;
 }

@@ -40,33 +40,16 @@ std::map<unsigned int, State> states = {
     {1,
      {"",
       {
-          {'0', 1},
-          {'1', 1},
-          {'2', 1},
-          {'3', 1},
-          {'4', 1},
-          {'5', 1},
-          {'6', 1},
-          {'7', 1},
-          {'8', 1},
-          {'9', 1},
-          {';', {3, false}},
-          {'>', {3, false}},
-          {'<', {3, false}},
-          {',', {3, false}},
-          {'*', {3, false}},
-          {'/', {3, false}},
-          {')', {3, false}},
-          {'.', 4},
-          {'+', 23},
-          {'-', 34},
-          {' ', {24, false}},
-          {'\t', {24, false}},
-          {'\n', {24, false}},
-          {'\0', 2},
+          {'0', 1},          {'1', 1},          {'2', 1},
+          {'3', 1},          {'4', 1},          {'5', 1},
+          {'6', 1},          {'7', 1},          {'8', 1},
+          {'9', 1},          {'<', {3, false}}, {'>', {3, false}},
+          {';', {3, false}}, {',', {3, false}}, {'*', {3, false}},
+          {'/', {3, false}}, {')', {3, false}}, {' ', {3, false}},
+          {'.', 4},          {'\0', 2},
       }}},
 
-    {2, {true, false, "error_number", {}}},
+    {2, {true, false, "Error(\"Wrong number formation\")", {}}},
 
     {3, {true, true, "integer_number", {}}},
 
@@ -87,52 +70,43 @@ std::map<unsigned int, State> states = {
     {5,
      {"",
       {
-          {'0', 5},
-          {'1', 5},
-          {'2', 5},
-          {'3', 5},
-          {'4', 5},
-          {'5', 5},
-          {'6', 5},
-          {'7', 5},
-          {'8', 5},
-          {'9', 5},
-          {'-', 35},
-          {'+', 29},
-          {' ', {27, false}},
-          {'\t', {27, false}},
-          {'\n', {27, false}},
-          {'\0', {6, false}},
+          {'0', 5},          {'1', 5},          {'2', 5},
+          {'3', 5},          {'4', 5},          {'5', 5},
+          {'6', 5},          {'7', 5},          {'8', 5},
+          {'9', 5},          {'<', {6, false}}, {'>', {6, false}},
+          {';', {6, false}}, {',', {6, false}}, {'*', {6, false}},
+          {'/', {6, false}}, {')', {6, false}}, {' ', {6, false}},
+          {'\0', 2},
       }}},
 
     {6, {true, true, "real_number", {}}},
 
     {7, {"", {{'}', {0, false}}, {'\n', {8, false}}, {'\0', {7, false}}}}},
 
-    {8, {"comment_error", {}}},
+    {8, {true, false, "Error(\"Wrong comment formation\")", {}}},
 
     {9, {"", {{'=', 17}, {'\0', {18, false}}}}},
 
-    {10, {"", {{'\0', 13}, {'=', 14}}}},
+    {10, {"", {{'\0', {13, false}}, {'=', 14}}}},
 
     {11, {"", {{'\0', {12, false}}, {'=', 15}, {'>', 16}}}},
 
     {12, {true, true, "simb_lesser", {}}},
 
-    {13, {true, true, "greater", {}}},
+    {13, {true, true, "simb_greater", {}}},
 
-    {14, {true, true, "greater_equal", {}}},
+    {14, {true, false, "simb_leq", {}}},
 
-    {15, {true, true, "lesser_equal", {}}},
+    {15, {true, false, "simb_geq", {}}},
 
-    {16, {true, true, "diff", {}}},
+    {16, {true, false, "simb_diff", {}}},
 
     {17, {true, false, "symb_atrib", {}}},
 
-    {18, {true, false, "simb_colon", {}}},
+    {18, {true, true, "simb_colon", {}}},
 
     {19,
-     {" ",
+     {"",
       {
           {'0', 1},  {'1', 1},  {'2', 1},  {'3', 1},
           {'4', 1},  {'5', 1},  {'6', 1},  {'7', 1},
@@ -154,50 +128,13 @@ std::map<unsigned int, State> states = {
 
     {20, {true, true, "id", {}}},
 
-    {21, {true, true, "divide", {}}},
+    {21, {true, false, "simb_divide", {}}},
 
     {22, {true, false, "simb_multiply", {}}},
 
-    {23, {true, false, "integer_number", {{'\0', 31}}}},
+    {32, {true, false, "simb_plus", {}}},
 
-    {24,
-     {true,
-      false,
-      "integer_number",
-      {{' ', {25, false}},
-       {'\t', {25, false}},
-       {'\n', {25, false}},
-       {'-', 28},
-       {'+', 26}}}},
-
-    {25,
-     {"",
-      {{' ', {25, false}},
-       {'\t', {25, false}},
-       {'\n', {25, false}},
-       {'-', 28},
-       {'+', 26}}}},
-
-    {26, {true, true, "signal", {}}},
-
-    {27,
-     {true,
-      false,
-      "real_number",
-      {{' ', {25, false}},
-       {'\t', {25, false}},
-       {'\n', {25, false}},
-       {'-', 28},
-       {'+', 26}}}},
-
-    {28, {true, true, "minus", {}}},
-
-    {29, {true, false, "real_number", {{'\0', 31}}}},
-
-    {30, {true, false, "minus", {}}},
-    {31, {true, false, "plus", {}}},
-    {32, {true, false, "positive", {}}},
-    {33, {true, false, "negative", {}}},
+    {33, {true, false, "simb_minus", {}}},
 
     {36, {true, false, "simb_lpar", {}}},
 
