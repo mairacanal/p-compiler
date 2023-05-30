@@ -18,18 +18,12 @@ class LexicalParser {
         {"program", "simb_program"},
         {"var", "simb_var"},
         {"begin", "simb_begin"},
-        {":", "simb_dp"},
-        {":=", "simb_atrib"},
         {"procedure", "simb_proc"},
         {"end", "simb_end"},
         {"write", "simb_write"},
         {"read", "simb_read"},
         {"while", "simb_while"},
-        {"+", "simb_add"},
-        {"-", "simb_sub"},
-        {"/", "simb_div"},
-        {"*", "simb_mul"}
-    };
+        {"do", "simb_do"}};
 
     if (symbol_table.find(value) == symbol_table.end())
       return type;
