@@ -71,7 +71,7 @@ std::map<unsigned int, State> states = {
           {'7', 5},
           {'8', 5},
           {'9', 5},
-          {'\0', 2},
+          {'\0', 2}
       }}},
     {5,
      {"",
@@ -89,7 +89,7 @@ std::map<unsigned int, State> states = {
           {'\0', 6},
           {' ',{7, false}},
           {'\t',{7, false}},
-          {'\n',{7, false}},
+          {'\n',{7, false}}
 
       }}},
     
@@ -97,7 +97,7 @@ std::map<unsigned int, State> states = {
      {"real_number",
       {
         {'+', 29},
-        {'-', 29},
+        {'-', 29}
       }}},
 
 
@@ -106,33 +106,33 @@ std::map<unsigned int, State> states = {
       {
           {'}', {0, false}},
           {'\n', {8, false}},
-          {'\0', {7, false}},
+          {'\0', {7, false}}
       }}},
 
-    {8, {"comment_error"{}}},
+    {8, {"comment_error",{}}},
 
-    {9
-     {"",
+    {9,
+     {" ",
         {
           {'=', 17},
-          {'\0', 18},
+          {'\0', 18}
 
      }}},
 
     {10, 
-     {" " 
+     {" ", 
         { 
             {'\0', 13},
-            {'=', 14},
+            {'=', 14}
 
         }}},
 
     {11, 
-     {" " 
+     {" ", 
         { 
             {'\0', 12},
             {'=', 15},
-            {'>', 16},
+            {'>', 16}
 
 
         }}},
@@ -180,9 +180,9 @@ std::map<unsigned int, State> states = {
 
     {24, 
      {"integer_number", 
-      { {' ', {, false}},
-        {'\t', {, false}}
-        {'\n', {, false}}
+      { {' ', {25, false}},
+        {'\t', {25, false}},
+        {'\n', {25, false}},
         {'-', 28},
         {'+', 28}
     }}},
@@ -190,8 +190,8 @@ std::map<unsigned int, State> states = {
     {25, 
      {" ", 
       { {' ', {25, false}},
-        {'\t', {25, false}}
-        {'\n', {25, false}}
+        {'\t', {25, false}},
+        {'\n', {25, false}},
         {'-', 28},
         {'+', 28}
     }}},
@@ -201,8 +201,8 @@ std::map<unsigned int, State> states = {
     {27, 
      {"real_number", 
       { {' ', {25, false}},
-        {'\t', {25, false}}
-        {'\n', {25, false}}
+        {'\t', {25, false}},
+        {'\n', {25, false}},
         {'-', 28},
         {'+', 28}
     }}},
