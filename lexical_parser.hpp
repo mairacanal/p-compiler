@@ -15,15 +15,11 @@ class LexicalParser {
   auto get_reserved_symbol(const std::string &value, const std::string &type)
       -> std::string {
     std::map<std::string, std::string> symbol_table = {
-        {"program", "simb_program"},
-        {"var", "simb_var"},
-        {"begin", "simb_begin"},
-        {"procedure", "simb_proc"},
-        {"end", "simb_end"},
-        {"write", "simb_write"},
-        {"read", "simb_read"},
-        {"while", "simb_while"},
-        {"do", "simb_do"}};
+        {"program", "simb_program"}, {"var", "simb_var"},
+        {"begin", "simb_begin"},     {"procedure", "simb_proc"},
+        {"end", "simb_end"},         {"write", "simb_write"},
+        {"read", "simb_read"},       {"while", "simb_while"},
+        {"do", "simb_do"},           {"integer", "simb_type"}};
 
     if (symbol_table.find(value) == symbol_table.end())
       return type;
@@ -42,6 +38,8 @@ class LexicalParser {
     state = states[state][c];
     go_back = states[state].should_go_back();
 
+    if (to_stack) stack += c;
+
     std::cout << "new state: " << state << std::endl;
     std::cout << std::endl;
 
@@ -58,8 +56,6 @@ class LexicalParser {
 
       return Token{value, type};
     }
-
-    if (to_stack) stack += c;
 
     return {};
   }
