@@ -7,9 +7,9 @@
 std::map<unsigned int, State> states = {
     {0,
      {
-         "",
+         " ",
          {
-             {' ', {0, false}}, {'\t', {0, false}}, {'\n', {0, false}},
+             {' ', {0, false}}, {'\t', {0, false}}, {'\n', {0, false}},    
              {'{', {7, false}}, {'0', 1},           {'1', 1},
              {'2', 1},          {'3', 1},           {'4', 1},
              {'5', 1},          {'6', 1},           {'7', 1},
@@ -31,14 +31,16 @@ std::map<unsigned int, State> states = {
              {'R', 19},         {'S', 19},          {'T', 19},
              {'U', 19},         {'V', 19},          {'W', 19},
              {'X', 19},         {'Y', 19},          {'Z', 19},
-             {'+', 26},         {'-', 26},          {':', 9},
+             {'+', 32},         {'-', 33},          {':', 9},
              {'>', 10},         {'<', 11},          {'/', 21},
-             {'*', 22},         {';', 34},
+             {'_', 19},         {'*', 22},         {';', {39, false}},
+            {'(', {37, false}}, {',', {37, false}}, 
+
          },
      }},
 
     {1,
-     {"",
+     {" ",
       {
           {'0', 1},  {'1', 1},   {'2', 1},   {'3', 1}, {'4', 1},  {'5', 1},
           {'6', 1},  {'7', 1},   {'8', 1},   {'9', 1}, {'a', 2},  {'b', 2},
@@ -50,8 +52,8 @@ std::map<unsigned int, State> states = {
           {'G', 2},  {'H', 2},   {'I', 2},   {'J', 2}, {'K', 2},  {'L', 2},
           {'M', 2},  {'N', 2},   {'O', 2},   {'P', 2}, {'Q', 2},  {'R', 2},
           {'S', 2},  {'T', 2},   {'U', 2},   {'V', 2}, {'W', 2},  {'X', 2},
-          {'Y', 2},  {'Z', 2},   {'\0', 4},  {'.', 4}, {'+', 23}, {'-', 23},
-          {' ', 24}, {'\t', 24}, {'\n', 24},
+          {'Y', 2},  {'Z', 2},   {'\0', 3},  {'.', 4}, {'+', 23}, {'-', 23},
+          {' ', {24, false}}, {'\t', {24, false}}, {'\n', {24, false}},
       }}},
 
     {2, {true, false, "error_number", {}}},
@@ -59,7 +61,7 @@ std::map<unsigned int, State> states = {
     {3, {true, false, "integer_number", {}}},
 
     {4,
-     {"",
+     {" ",
       {
           {'0', 5},
           {'1', 5},
@@ -73,8 +75,9 @@ std::map<unsigned int, State> states = {
           {'9', 5},
           {'\0', 2}
       }}},
+
     {5,
-     {"",
+     {" ",
       {
           {'0', 5},
           {'1', 5},
@@ -86,23 +89,22 @@ std::map<unsigned int, State> states = {
           {'7', 5},
           {'8', 5},
           {'9', 5},
-          {'\0', 6},
-          {' ',{7, false}},
-          {'\t',{7, false}},
-          {'\n',{7, false}}
+          {'\0', {6, false}},
+          {'-', 35},
+          {'+', 29},
+          {' ',{27, false}},
+          {'\t',{27, false}},
+          {'\n',{27, false}}
 
       }}},
     
     {6,
-     {"real_number",
-      {
-        {'+', 29},
-        {'-', 29}
-      }}},
+     {true, true, "real_number",
+      {}}},
 
 
     {7,
-     {"",
+     {" ",
       {
           {'}', {0, false}},
           {'\n', {8, false}},
@@ -137,19 +139,19 @@ std::map<unsigned int, State> states = {
 
         }}},
 
-    {12, {"lesser", {}}},
+    {12, {true, true, "lesser", {}}},
 
-    {13, {"greater", {}}},
+    {13, {true, true, "greater", {}}},
 
-    {14, {"greater_equal", {}}},
+    {14, {true, true, "greater_equal", {}}},
 
-    {15, {"lesser_equal", {}}},
+    {15, {true, true, "lesser_equal", {}}},
 
-    {16, {"diff", {}}},
+    {16, {true, true, "diff", {}}},
 
-    {17, {"attribution", {}}},
+    {17, {true, true, "attribution", {}}},
 
-    {18, {"type_attribution", {}}},
+    {18, {true, true, "type_attribution", {}}},
 
     {19,
      {" ",
@@ -168,23 +170,23 @@ std::map<unsigned int, State> states = {
       }}},
     {20, {true, true, "id", {}}},
     
-    {21, {"divide", {}}},
+    {21, {true, true, "divide", {}}},
 
-    {22, {"multiply", {}}},
+    {22, {true, true, "multiply", {}}},
 
     {23, 
-     {"integer_number", 
+     {true, false, "integer_number", 
       {
-        {'\0', 28}
+        {'\0', 31}
     }}},
 
     {24, 
-     {"integer_number", 
+     {true, false, "integer_number", 
       { {' ', {25, false}},
         {'\t', {25, false}},
         {'\n', {25, false}},
         {'-', 28},
-        {'+', 28}
+        {'+', 26}
     }}},
 
     {25, 
@@ -193,25 +195,29 @@ std::map<unsigned int, State> states = {
         {'\t', {25, false}},
         {'\n', {25, false}},
         {'-', 28},
-        {'+', 28}
+        {'+', 26}
     }}},
     
-    {26, {"signal", {}}},
+    {26, {true, true, "signal", {}}},
 
     {27, 
-     {"real_number", 
+     {true, false, "real_number", 
       { {' ', {25, false}},
         {'\t', {25, false}},
         {'\n', {25, false}},
         {'-', 28},
-        {'+', 28}
+        {'+', 26}
     }}},
 
-    {28, {"plus_minus_operation", {}}},
+    {28, {true, true, "minus", {}}},
 
-    {29, {"signal", {}}},    
-    
+    {29, {true, false,"real_number", {
+                            {'\0', 31}
+    }}},    
 
-
+    {30, {true, false, "minus", {}}},
+    {31, {true, false, "plus", {}}},
+    {32, {true, false, "positive", {}}},
+    {33, {true, false, "negative", {}}},
     {34, {true, false, "simb_pv", {}}},
 };
