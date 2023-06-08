@@ -12,6 +12,13 @@ class LexicalParser {
   bool go_back = false;
   std::string stack{};
 
+  /**
+   * @brief Retrieves the reserved symbol for a given value, if it exists.
+   *
+   * @param value The value to check for a reserved symbol.
+   * @param type The original type associated with the value.
+   * @return The reserved symbol if found, otherwise the original type.
+   */
   auto get_reserved_symbol(const std::string &value, const std::string &type)
       -> std::string {
     std::map<std::string, std::string> symbol_table = {
@@ -32,8 +39,19 @@ class LexicalParser {
   }
 
  public:
+  /**
+   * @brief Checks if the parser should go back to a previous state.
+   *
+   * @return True if the parser should go back, false otherwise.
+   */
   auto should_go_back() { return go_back; }
 
+  /**
+   * @brief Processes the next character and returns the generated token if available.
+   *
+   * @param c The next character to process.
+   * @return An optional Token object if a token is generated, otherwise an empty optional.
+   */
   auto next(const char &c) -> std::optional<Token> {
     auto to_stack = states[state].add_to_stack(c);
 
