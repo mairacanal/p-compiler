@@ -113,7 +113,7 @@ void Parser::variaveis() {
  */
 void Parser::dc_p() {
   while (token.get_type() == "simb_proc") {
-    match("simp_proc");
+    match("simb_proc");
     match("id");
     parametros();
     match("simb_semicolon");
@@ -169,7 +169,7 @@ void Parser::dc_loc() { dc_v(); }
 void Parser::lista_arg() {
   if (match("simb_lpar", true)) return;
   argumentos();
-  match("simp_rpar");
+  match("simb_rpar");
 }
 
 /**
@@ -178,7 +178,7 @@ void Parser::lista_arg() {
 void Parser::argumentos() {
   match("id");
 
-  // <mais_ident>
+  // <mais_ident> = ; <argumentos> | λ
   while (token.get_type() == "simb_semicolon") {
     match("simb_semicolon");
     match("id");
