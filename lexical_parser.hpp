@@ -30,7 +30,7 @@ class LexicalParser {
         {"integer", "simb_type"},    {"real", "simb_real"},
         {"for", "simb_for"},         {"if", "simb_if"},
         {"then", "simb_then"},       {"else", "simb_else"},
-    };
+        {"const", "simb_const"}};
 
     if (symbol_table.find(value) == symbol_table.end())
       return type;
