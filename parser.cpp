@@ -10,7 +10,6 @@
  */
 bool Parser::match(const std::string& exp_token, bool empty) {
   // TODO: remove
-  std::string bla{};
   std::cout << token << std::endl;
 
   if (token.get_type() != exp_token) {
@@ -21,7 +20,6 @@ bool Parser::match(const std::string& exp_token, bool empty) {
   }
 
   token = get_token();
-  std::cin >> bla;
   return false;
 }
 
@@ -109,7 +107,7 @@ void Parser::tipo_var() {
 }
 
 /**
- * @brief
+ * @brief <variaveis> ::= ident <mais_var>
  */
 void Parser::variaveis() {
   match("id");
@@ -129,11 +127,7 @@ void Parser::variaveis() {
  */
 void Parser::dc_p() {
   while (token.get_type() == "simb_proc") {
-    // TODO: Print token for debug purposes
-    std::cout << token << std::endl;
-
-    token = get_token();
-
+    match("simp_proc");
     match("id");
     parametros();
     match("simb_semicolon");
@@ -160,10 +154,7 @@ void Parser::lista_par() {
 
   // <mais_par>
   while (token.get_type() == "simb_semicolon") {
-    std::cout << token << std::endl;
-
-    token = get_token();
-
+    match("simb_semicolon");
     variaveis();
     match("simb_colon");
     tipo_var();
@@ -172,7 +163,6 @@ void Parser::lista_par() {
 
 /**
  * @brief <corpo_p> ::= <dc_loc> begin <comandos> end ;
- *
  */
 void Parser::corpo_p() {
   dc_loc();
@@ -184,13 +174,11 @@ void Parser::corpo_p() {
 
 /**
  * @brief <dc_loc> ::= <dc_v>
- *
  */
 void Parser::dc_loc() { dc_v(); }
 
 /**
  * @brief <lista_arg> ::= ( <argumentos> ) | λ
- *
  */
 void Parser::lista_arg() {
   if (match("simb_lpar", true)) return;
@@ -200,17 +188,13 @@ void Parser::lista_arg() {
 
 /**
  * @brief <argumentos> ::= ident <mais_ident>
- *
  */
 void Parser::argumentos() {
   match("id");
 
   // <mais_ident>
   while (token.get_type() == "simb_semicolon") {
-    // TODO: remover
-    std::cout << token << std::endl;
-
-    token = get_token();
+    match("simb_semicolon");
     match("id");
   }
 }
@@ -222,24 +206,18 @@ void Parser::pfalsa() {
 
 /**
  * @brief cmd_ident_tail ::= := <expressao> | <lista_arg>
- *
  */
 void Parser::cmd_ident_tail() {
   // Check if current_token is :=
   if (token.get_type() == "simb_atrib") {
-    // TODO: remover
-    std::cout << token << std::endl;
-
-    token = get_token();
+    match("simb_atrib");
     expressao();
-  } else {
+  } else
     lista_arg();
-  }
 }
 
 /**
  * @brief <comandos> ::= <cmd> ; <comandos> | λ
- *
  */
 void Parser::comandos() {
   // Possible cmd: read, write, while, if, ident, begin
@@ -261,6 +239,7 @@ void Parser::comandos() {
  * @brief <cmd> ::= read ( <variaveis> ) |
  *                  write ( <variaveis> ) |
  *                  while ( <condicao> ) do <cmd> |
+ *                  for ident := <expressão> to <expressão> do <cmd> |
  *                  if <condicao> then <cmd> <pfalsa> |
  *                  ident := <expressão> |
  *                  ident <lista_arg> |
@@ -298,6 +277,19 @@ void Parser::cmd() {
     return;
   }
 
+  if (cur_token == "simb_for") {
+    match("simb_for");
+    match("id");
+    match("simb_atrib");
+    expressao();
+    match("simb_to");
+    expressao();
+    match("simb_do");
+    cmd();
+
+    return;
+  }
+
   if (cur_token == "simb_if") {
     match("simb_if");
     condicao();
@@ -308,7 +300,6 @@ void Parser::cmd() {
     return;
   }
 
-  //
   if (cur_token == "id") {
     match("id");
     cmd_ident_tail();
@@ -327,7 +318,6 @@ void Parser::cmd() {
 
 /**
  * @brief <condicao> ::= <expressao> <relacao> <expressao>
- *
  */
 void Parser::condicao() {
   expressao();
@@ -337,7 +327,6 @@ void Parser::condicao() {
 
 /**
  * @brief <relacao> ::= = | <> | >= | <= | > | <
- *
  */
 void Parser::relacao() {
   if (token.get_type() != "simb_equal" && token.get_type() != "simb_diff" &&
@@ -442,7 +431,6 @@ void Parser::op_mul() {
 
 /**
  * @brief <fator> ::= ident | <numero> | ( <expressao> )
- *
  */
 void Parser::fator() {
   if (token.get_type() == "id") {
@@ -465,7 +453,6 @@ void Parser::fator() {
 
 /**
  * @brief <fator> ::= ident | <numero> | ( <expressao> )
- *
  */
 void Parser::numero() {
   if (token.get_type() != "integer_number" &&
@@ -481,13 +468,12 @@ void Parser::numero() {
 /**
  * @brief Construct a new Parser:: Parser object
  *
- * @param filename
+ * @param Input filename
  */
 Parser::Parser(const std::string& filename) { file.open(filename); }
 
 /**
  * @brief Destroy the Parser:: Parser object
- *
  */
 Parser::~Parser() { file.close(); }
 

@@ -42,7 +42,7 @@ class Parser {
   void lista_arg();
 
   void argumentos();
-  
+
   void pfalsa();
 
   void cmd_ident_tail();
