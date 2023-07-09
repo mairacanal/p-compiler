@@ -43,7 +43,7 @@ c, id
 then, simb_then
 begin, simb_begin
 a, id
-:=, symb_atrib
+:=, simb_atrib
 c, id
 +, simb_plus
 x, id
@@ -56,7 +56,7 @@ a, id
 end, simb_end
 else, simb_else
 c, id
-:=, symb_atrib
+:=, simb_atrib
 a, id
 +, simb_plus
 x, id
