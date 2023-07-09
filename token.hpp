@@ -9,6 +9,8 @@ class Token {
   std::string type;
 
  public:
+  Token() : value{}, type{} {}
+
   Token(std::string value, std::string type) : value{value}, type{type} {}
 
   /**
@@ -29,4 +31,8 @@ class Token {
     os << token.value << ", " << token.type;
     return os;
   }
+
+  auto get_type() -> std::string { return type; }
+
+  auto get_value() -> std::string { return value; }
 };
