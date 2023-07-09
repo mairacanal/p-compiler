@@ -58,8 +58,7 @@ void Parser::dc() {
  */
 void Parser::dc_c() {
   while (token.get_type() == "simb_const") {
-    // TODO: add const to the transition table
-    // match("simb_const");
+    match("simb_const");
     match("id");
     // TODO: add simb_equal to the transition table
     // match("simb_equal")
@@ -182,7 +181,7 @@ void Parser::lista_arg() {
 void Parser::argumentos() {
   match("id");
 
-  // <mais_ident>
+  // <mais_ident> = ; <argumentos> | λ
   while (token.get_type() == "simb_semicolon") {
     match("simb_semicolon");
     match("id");
@@ -359,7 +358,6 @@ void Parser::op_un() {
  * @brief <outros_termos> ::= <op_ad> <termo> <outros_termos> | λ
  */
 void Parser::outros_termos() {
-  
   while (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
     output_file << token << std::endl;
 
@@ -397,10 +395,10 @@ void Parser::termo() {
  * @brief <mais_fatores> ::= <op_mul> <fator> <mais_fatores> | λ
  */
 void Parser::mais_fatores() {
-  
-  while (token.get_type() == "simb_multiply" || token.get_type() == "simb_divide") {
+  while (token.get_type() == "simb_multiply" ||
+         token.get_type() == "simb_divide") {
+    std::cout << token << std::endl;
     token = get_token();
-    
     fator();
   }
 }
