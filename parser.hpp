@@ -10,6 +10,7 @@ class Parser {
  private:
   LexicalParser lexical;
   std::ifstream file;
+  std::ofstream output_file;
   Token token;
   char c;
 

@@ -9,7 +9,7 @@
  * @return false
  */
 bool Parser::match(const std::string& exp_token, bool empty) {
-  std::cout << token << std::endl;
+  output_file << token << std::endl;
 
   if (token.get_type() != exp_token) {
     if (empty) return true;
@@ -17,7 +17,8 @@ bool Parser::match(const std::string& exp_token, bool empty) {
     // TODO: error!
     return true;
   }
-
+  char l;
+  //std::cin >> l;
   token = get_token();
   return false;
 }
@@ -85,13 +86,15 @@ void Parser::dc_v() {
  */
 void Parser::tipo_var() {
   if (token.get_type() != "simb_type" && token.get_type() != "simb_real") {
-    std::cout << "Erro sintático: " << token.get_value()
+    output_file << "Erro sintático: " << token.get_value()
               << " não é um tipo válido." << std::endl;
+
+    
     token = get_token();
     return;
   }
 
-  std::cout << token << std::endl;
+  output_file << token << std::endl;
   token = get_token();
 }
 
@@ -113,7 +116,7 @@ void Parser::variaveis() {
  */
 void Parser::dc_p() {
   while (token.get_type() == "simb_proc") {
-    match("simp_proc");
+    match("simb_proc");
     match("id");
     parametros();
     match("simb_semicolon");
@@ -128,6 +131,7 @@ void Parser::parametros() {
   if (match("simb_lpar", true)) return;
   lista_par();
   match("simb_rpar");
+  
 }
 
 /**
@@ -169,7 +173,7 @@ void Parser::dc_loc() { dc_v(); }
 void Parser::lista_arg() {
   if (match("simb_lpar", true)) return;
   argumentos();
-  match("simp_rpar");
+  match("simb_rpar");
 }
 
 /**
@@ -232,7 +236,6 @@ void Parser::cmd() {
     match("simb_lpar");
     variaveis();
     match("simb_rpar");
-
     return;
   }
 
@@ -241,7 +244,6 @@ void Parser::cmd() {
     match("simb_lpar");
     variaveis();
     match("simb_rpar");
-
     return;
   }
 
@@ -323,13 +325,13 @@ void Parser::relacao() {
   if (token.get_type() != "simb_equal" && token.get_type() != "simb_diff" &&
       token.get_type() != "simb_geq" && token.get_type() != "simb_leq" &&
       token.get_type() != "simb_lesser" && token.get_type() != "simb_greater") {
-    std::cout << "Erro sintático: " << token.get_value()
+    output_file << "Erro sintático: " << token.get_value()
               << " não é uma relacao valida." << std::endl;
     token = get_token();
     return;
   }
 
-  std::cout << token << std::endl;
+  output_file << token << std::endl;
   token = get_token();
 }
 
@@ -346,7 +348,7 @@ void Parser::expressao() {
  */
 void Parser::op_un() {
   if (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    std::cout << token << std::endl;
+    output_file << token << std::endl;
 
     token = get_token();
     return;
@@ -359,7 +361,7 @@ void Parser::op_un() {
 void Parser::outros_termos() {
   
   while (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    std::cout << token << std::endl;
+    output_file << token << std::endl;
 
     token = get_token();
     termo();
@@ -372,12 +374,12 @@ void Parser::outros_termos() {
  */
 void Parser::op_ad() {
   if (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    std::cout << token << std::endl;
+    output_file << token << std::endl;
     token = get_token();
     return;
   } else {
     token = get_token();
-    std::cout << "Erro sintático: " << token.get_value()
+    output_file << "Erro sintático: " << token.get_value()
               << " não é uma operacao valida." << std::endl;
   }
 }
@@ -409,12 +411,12 @@ void Parser::mais_fatores() {
 void Parser::op_mul() {
   if (token.get_type() != "simb_multiply" &&
       token.get_type() != "simb_divide") {
-    std::cout << "Erro sintático: " << token.get_value()
+    output_file << "Erro sintático: " << token.get_value()
               << " não é uma operação valida." << std::endl;
     token = get_token();
     return;
   }
-  std::cout << token << std::endl;
+  output_file << token << std::endl;
   token = get_token();
 }
 
@@ -433,7 +435,7 @@ void Parser::fator() {
     expressao();
     match("simb_rpar");
   } else {
-    std::cout << "Erro sintático: " << token.get_value()
+    output_file << "Erro sintático: " << token.get_value()
               << " não é um fato válido." << std::endl;
     token = get_token();
     return;
@@ -446,7 +448,7 @@ void Parser::fator() {
 void Parser::numero() {
   if (token.get_type() != "integer_number" &&
       token.get_type() != "real_number") {
-    std::cout << "Erro sintático: " << token.get_value()
+    output_file << "Erro sintático: " << token.get_value()
               << " não é número real ou inteiro." << std::endl;
     return;
   }
@@ -478,7 +480,7 @@ Token Parser::get_token() {
     token = lexical.next(c);
     if (token) {
       if (!token.value().get_type().find("Erro Léxico"))
-        std::cout << token.value().get_type() << std::endl;
+        output_file << token.value().get_type() << std::endl;
       else
         return token.value();
     }
@@ -490,7 +492,7 @@ Token Parser::get_token() {
     token = lexical.next(c);
     if (token) {
       if (!token.value().get_type().find("Erro Léxico"))
-        std::cout << token.value().get_type() << std::endl;
+        output_file << token.value().get_type() << std::endl;
       else
         return token.value();
     }
@@ -504,6 +506,8 @@ Token Parser::get_token() {
  *
  */
 void Parser::parse() {
+  output_file.open("output.txt");
+
   token = get_token();
   programa();
 
