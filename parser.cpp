@@ -230,7 +230,7 @@ void Parser::comandos() {
   // First(<cmd>)
   while (cur_token == "simb_read" || cur_token == "simb_write" ||
          cur_token == "simb_while" || cur_token == "simb_if" ||
-         cur_token == "simb_begin" || cur_token == "id") {
+         cur_token == "simb_begin" || cur_token == "id" || cur_token == "simb_for") {
     cmd();
     match("simb_semicolon");
 
@@ -372,6 +372,7 @@ void Parser::op_un() {
  * @brief <outros_termos> ::= <op_ad> <termo> <outros_termos> | λ
  */
 void Parser::outros_termos() {
+  
   while (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
     // TODO: remover
     std::cout << token << std::endl;
@@ -411,8 +412,10 @@ void Parser::termo() {
  * @brief <mais_fatores> ::= <op_mul> <fator> <mais_fatores> | λ
  */
 void Parser::mais_fatores() {
-  while (token.get_type() == "simb_mul" || token.get_type() == "simb_divide") {
+  
+  while (token.get_type() == "simb_multiply" || token.get_type() == "simb_divide") {
     token = get_token();
+    
     fator();
   }
 }
