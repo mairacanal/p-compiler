@@ -47,10 +47,12 @@ class LexicalParser {
   auto should_go_back() { return go_back; }
 
   /**
-   * @brief Processes the next character and returns the generated token if available.
+   * @brief Processes the next character and returns the generated token if
+   * available.
    *
    * @param c The next character to process.
-   * @return An optional Token object if a token is generated, otherwise an empty optional.
+   * @return An optional Token object if a token is generated, otherwise an
+   * empty optional.
    */
   auto next(const char &c) -> std::optional<Token> {
     auto to_stack = states[state].add_to_stack(c);

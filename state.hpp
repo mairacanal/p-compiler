@@ -11,7 +11,7 @@ class Transition {
  public:
   /**
    * @brief Default constructor for Transition.
-   * 
+   *
    * Initializes the Transition object with default values.
    */
   Transition() : state{0}, to_stack{true} {}
@@ -28,7 +28,8 @@ class Transition {
   /**
    * @brief Constructor for Transition.
    *
-   * Initializes the Transition object with a specified state and stack behavior.
+   * Initializes the Transition object with a specified state and stack
+   * behavior.
    *
    * @param state The state to transition to.
    * @param to_stack Determines if the character should be added to the stack.
@@ -46,7 +47,8 @@ class Transition {
   /**
    * @brief Checks if the character should be added to the stack.
    *
-   * @return True if the character should be added to the stack, false otherwise.
+   * @return True if the character should be added to the stack, false
+   * otherwise.
    */
   auto add_to_stack() -> bool { return to_stack; }
 };
@@ -124,10 +126,12 @@ class State {
   auto should_go_back() -> bool { return go_back; }
 
   /**
-   * @brief Determines if the character should be added to the stack based on the current state.
+   * @brief Determines if the character should be added to the stack based on
+   * the current state.
    *
    * @param c The character to check for a transition.
-   * @return True if the character should be added to the stack, false otherwise.
+   * @return True if the character should be added to the stack, false
+   * otherwise.
    */
   auto add_to_stack(const char &c) -> bool {
     return transitions.count(c) ? transitions[c].add_to_stack()
@@ -135,7 +139,8 @@ class State {
   }
 
   /**
-   * @brief Retrieves the state to transition to based on the current state and input character.
+   * @brief Retrieves the state to transition to based on the current state and
+   * input character.
    *
    * @param c The input character to check for a transition.
    * @return The state to transition to.

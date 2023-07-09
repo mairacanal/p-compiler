@@ -33,6 +33,7 @@ int main() {
   }
 
   std::cout << std::endl;
-  std::cout << "Output of the lexical analyzer was saved on the file output.txt."
-            << std::endl;
+  std::cout
+      << "Output of the lexical analyzer was saved on the file output.txt."
+      << std::endl;
 }
