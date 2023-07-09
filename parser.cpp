@@ -397,7 +397,7 @@ void Parser::termo() {
 void Parser::mais_fatores() {
   while (token.get_type() == "simb_multiply" ||
          token.get_type() == "simb_divide") {
-    std::cout << token << std::endl;
+    output_file << token << std::endl;
     token = get_token();
     fator();
   }
