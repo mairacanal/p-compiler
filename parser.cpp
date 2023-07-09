@@ -357,7 +357,6 @@ void Parser::op_un() {
  * @brief <outros_termos> ::= <op_ad> <termo> <outros_termos> | λ
  */
 void Parser::outros_termos() {
-  
   while (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
     std::cout << token << std::endl;
 
@@ -395,10 +394,10 @@ void Parser::termo() {
  * @brief <mais_fatores> ::= <op_mul> <fator> <mais_fatores> | λ
  */
 void Parser::mais_fatores() {
-  
-  while (token.get_type() == "simb_multiply" || token.get_type() == "simb_divide") {
+  while (token.get_type() == "simb_multiply" ||
+         token.get_type() == "simb_divide") {
+    std::cout << token << std::endl;
     token = get_token();
-    
     fator();
   }
 }
