@@ -60,8 +60,7 @@ void Parser::dc_c() {
   while (token.get_type() == "simb_const") {
     match("simb_const");
     match("id");
-    // TODO: add simb_equal to the transition table
-    // match("simb_equal")
+    match("simb_equal");
     numero();
     match("simb_semicolon");
   }
