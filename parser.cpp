@@ -9,7 +9,6 @@
  * @return false
  */
 bool Parser::match(const std::string& exp_token, bool empty) {
-  // TODO: remove
   std::cout << token << std::endl;
 
   if (token.get_type() != exp_token) {
@@ -58,11 +57,6 @@ void Parser::dc() {
  */
 void Parser::dc_c() {
   while (token.get_type() == "simb_const") {
-    // TODO: remove
-    std::cout << token << std::endl;
-
-    token = get_token();
-
     // TODO: add const to the transition table
     // match("simb_const");
     match("id");
@@ -78,11 +72,7 @@ void Parser::dc_c() {
  */
 void Parser::dc_v() {
   while (token.get_type() == "simb_var") {
-    // TODO: remove
-    std::cout << token << std::endl;
-
-    token = get_token();
-
+    match("simb_var");
     variaveis();
     match("simb_colon");
     tipo_var();
@@ -101,7 +91,6 @@ void Parser::tipo_var() {
     return;
   }
 
-  // TODO: remover
   std::cout << token << std::endl;
   token = get_token();
 }
@@ -114,10 +103,7 @@ void Parser::variaveis() {
 
   // <mais_var>
   while (token.get_type() == "simb_comma") {
-    // TODO: remove
-    std::cout << token << std::endl;
-    token = get_token();
-
+    match("simb_comma");
     match("id");
   }
 }
@@ -209,18 +195,6 @@ void Parser::pfalsa() {
 }
 
 /**
- * @brief cmd_ident_tail ::= := <expressao> | <lista_arg>
- */
-void Parser::cmd_ident_tail() {
-  // Check if current_token is :=
-  if (token.get_type() == "simb_atrib") {
-    match("simb_atrib");
-    expressao();
-  } else
-    lista_arg();
-}
-
-/**
  * @brief <comandos> ::= <cmd> ; <comandos> | λ
  */
 void Parser::comandos() {
@@ -229,8 +203,9 @@ void Parser::comandos() {
 
   // First(<cmd>)
   while (cur_token == "simb_read" || cur_token == "simb_write" ||
-         cur_token == "simb_while" || cur_token == "simb_if" ||
-         cur_token == "simb_begin" || cur_token == "id") {
+         cur_token == "simb_while" || cur_token == "simb_for" ||
+         cur_token == "simb_if" || cur_token == "simb_begin" ||
+         cur_token == "id") {
     cmd();
     match("simb_semicolon");
 
@@ -321,6 +296,18 @@ void Parser::cmd() {
 }
 
 /**
+ * @brief cmd_ident_tail ::= := <expressao> | <lista_arg>
+ */
+void Parser::cmd_ident_tail() {
+  // Check if current_token is :=
+  if (token.get_type() == "simb_atrib") {
+    match("simb_atrib");
+    expressao();
+  } else
+    lista_arg();
+}
+
+/**
  * @brief <condicao> ::= <expressao> <relacao> <expressao>
  */
 void Parser::condicao() {
@@ -342,7 +329,6 @@ void Parser::relacao() {
     return;
   }
 
-  // TODO: tirar
   std::cout << token << std::endl;
   token = get_token();
 }
@@ -360,7 +346,6 @@ void Parser::expressao() {
  */
 void Parser::op_un() {
   if (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    // TODO: remover
     std::cout << token << std::endl;
 
     token = get_token();
@@ -373,7 +358,6 @@ void Parser::op_un() {
  */
 void Parser::outros_termos() {
   while (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    // TODO: remover
     std::cout << token << std::endl;
 
     token = get_token();
@@ -387,7 +371,6 @@ void Parser::outros_termos() {
  */
 void Parser::op_ad() {
   if (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    // TODO: remover
     std::cout << token << std::endl;
     token = get_token();
     return;
@@ -428,7 +411,6 @@ void Parser::op_mul() {
     token = get_token();
     return;
   }
-  // TODO: remover
   std::cout << token << std::endl;
   token = get_token();
 }
