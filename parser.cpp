@@ -199,6 +199,10 @@ void Parser::argumentos() {
   }
 }
 
+/**
+ * @brief <pfalsa> ::= else <cmd> | λ
+ *
+ */
 void Parser::pfalsa() {
   if (match("simb_else", true)) return;
   cmd();
