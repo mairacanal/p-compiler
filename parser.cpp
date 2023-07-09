@@ -10,7 +10,7 @@
  */
 bool Parser::match(const std::string& exp_token, bool empty) {
   // TODO: remove
-  std::string bla {};
+  std::string bla{};
   std::cout << token << std::endl;
 
   if (token.get_type() != exp_token) {
@@ -222,7 +222,7 @@ void Parser::pfalsa() {
 
 /**
  * @brief cmd_ident_tail ::= := <expressao> | <lista_arg>
- * 
+ *
  */
 void Parser::cmd_ident_tail() {
   // Check if current_token is :=
@@ -251,6 +251,9 @@ void Parser::comandos() {
          cur_token == "simb_begin" || cur_token == "id") {
     cmd();
     match("simb_semicolon");
+
+    // Update current token
+    cur_token = token.get_type();
   }
 }
 
@@ -375,11 +378,11 @@ void Parser::op_un() {
 /**
  * @brief <outros_termos> ::= <op_ad> <termo> <outros_termos> | λ
  */
-void Parser::outros_termos(){
+void Parser::outros_termos() {
   while (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
     // TODO: remover
     std::cout << token << std::endl;
-  
+
     token = get_token();
     termo();
   }
@@ -395,8 +398,7 @@ void Parser::op_ad() {
     std::cout << token << std::endl;
     token = get_token();
     return;
-  }
-  else{
+  } else {
     token = get_token();
     std::cout << "Erro sintático: " << token.get_value()
               << " não é uma operacao valida." << std::endl;
@@ -416,11 +418,10 @@ void Parser::termo() {
  * @brief <mais_fatores> ::= <op_mul> <fator> <mais_fatores> | λ
  */
 void Parser::mais_fatores() {
-    while(token.get_type() == "simb_mul" || token.get_type() == "simb_divide"){
-      token = get_token();
-      fator();
-    }
-    
+  while (token.get_type() == "simb_mul" || token.get_type() == "simb_divide") {
+    token = get_token();
+    fator();
+  }
 }
 
 /**
