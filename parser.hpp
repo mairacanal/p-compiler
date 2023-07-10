@@ -1,10 +1,10 @@
 #pragma once
 
+#include <cstring>
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <cstring>
-#include <exception>
 
 #include "lexical_parser.hpp"
 #include "token.hpp"
@@ -16,21 +16,21 @@ class Parser {
   std::ofstream output_file;
   Token token;
   std::map<std::string, std::string> symbol_table = {
-        {"program", "simb_program"}, {"var", "simb_var"},
-        {"begin", "simb_begin"},     {"procedure", "simb_proc"},
-        {"end", "simb_end"},         {"write", "simb_write"},
-        {"read", "simb_read"},       {"while", "simb_while"},
-        {"do", "simb_do"},           {"to", "simb_to"},
-        {"integer", "simb_type"},    {"real", "simb_real"},
-        {"for", "simb_for"},         {"if", "simb_if"},
-        {"then", "simb_then"},       {"else", "simb_else"},
+      {"program", "simb_program"}, {"var", "simb_var"},
+      {"begin", "simb_begin"},     {"procedure", "simb_proc"},
+      {"end", "simb_end"},         {"write", "simb_write"},
+      {"read", "simb_read"},       {"while", "simb_while"},
+      {"do", "simb_do"},           {"to", "simb_to"},
+      {"integer", "simb_type"},    {"real", "simb_real"},
+      {"for", "simb_for"},         {"if", "simb_if"},
+      {"then", "simb_then"},       {"else", "simb_else"},
   };
   char c;
 
   bool match(const std::string& exp_token, bool empty = false);
 
   void panic_mode();
-  
+
   void programa();
 
   void corpo();
@@ -89,7 +89,7 @@ class Parser {
 
   void numero();
 
-  public:
+ public:
   Parser(const std::string& filename);
   ~Parser();
 

@@ -1,15 +1,12 @@
 #include "parser.hpp"
 
-
 class syntax_exc : public std::exception {
-  private:
-  char * msg;
+ private:
+  char* msg;
 
-  public:
-  syntax_exc(char * message) : msg(message) {}
-  char * what () {
-      return msg;
-  }
+ public:
+  syntax_exc(char* message) : msg(message) {}
+  char* what() { return msg; }
 };
 
 /**
@@ -21,21 +18,19 @@ class syntax_exc : public std::exception {
  * @return false
  */
 
-
 bool Parser::match(const std::string& exp_token, bool empty) {
-    output_file << token << std::endl;
+  output_file << token << std::endl;
 
   if (token.get_type() != exp_token) {
     if (empty) return true;
     std::string err_msg = "";
-    err_msg = "Erro sintático: esperava " + exp_token + " foi recebido " + token.get_value();
-    char *err_array = new char[err_msg.length() + 1];
+    err_msg = "Erro sintático: esperava " + exp_token + " foi recebido " +
+              token.get_value();
+    char* err_array = new char[err_msg.length() + 1];
     strcpy(err_array, err_msg.c_str());
-    throw syntax_exc(err_array); 
+    throw syntax_exc(err_array);
     return true;
   }
-  char l;
-  //std::cin >> l;
   token = get_token();
   return false;
 }
@@ -44,53 +39,52 @@ bool Parser::match(const std::string& exp_token, bool empty) {
  * @brief <programa> ::= program ident ; <corpo> .
  */
 void Parser::programa() {
-    try {
-        match("simb_program");
-        match("id");
-        match("simb_semicolon");
-    } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
-    }
-    corpo();
-    try {
-        match("simb_dot");
-    } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-    }
+  try {
+    match("simb_program");
+    match("id");
+    match("simb_semicolon");
+  } catch (syntax_exc se) {
+    output_file << se.what() << std::endl;
+    panic_mode();
+  }
+  corpo();
+  try {
+    match("simb_dot");
+  } catch (syntax_exc se) {
+    output_file << se.what() << std::endl;
+  }
 }
 
 void Parser::panic_mode() {
-    bool flag = false;
-    while(!flag) {
-        for(const auto& kv : symbol_table)
-            if(token.get_type() == kv.second) {
-                flag = true;
-                break;
-            }
-        token = get_token();
-    }
+  bool flag = false;
+  while (!flag) {
+    for (const auto& kv : symbol_table)
+      if (token.get_type() == kv.second) {
+        flag = true;
+        break;
+      }
+    token = get_token();
+  }
 }
 
 /**
  * @brief <corpo> ::= <dc> begin <comandos> end
  */
 void Parser::corpo() {
-    dc();
-    try {
-        match("simb_begin");
-    } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
-    }
-    comandos();
-    try{
-        match("simb_end");
-    } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
-    }
-
+  dc();
+  try {
+    match("simb_begin");
+  } catch (syntax_exc se) {
+    output_file << se.what() << std::endl;
+    panic_mode();
+  }
+  comandos();
+  try {
+    match("simb_end");
+  } catch (syntax_exc se) {
+    output_file << se.what() << std::endl;
+    panic_mode();
+  }
 }
 
 /**
@@ -111,20 +105,20 @@ void Parser::dc_c() {
     output_file << token << std::endl;
 
     token = get_token();
-    try{
-        match("simb_const");
-        match("id");
-        match("simb_equal");
-        numero();
+    try {
+      match("simb_const");
+      match("id");
+      match("simb_equal");
+      numero();
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
     try {
-        match("simb_semicolon");
+      match("simb_semicolon");
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
   }
 }
@@ -135,24 +129,24 @@ void Parser::dc_c() {
 void Parser::dc_v() {
   while (token.get_type() == "simb_var") {
     try {
-        match("simb_var");
+      match("simb_var");
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
     variaveis();
     try {
-        match("simb_colon");
-        tipo_var();
+      match("simb_colon");
+      tipo_var();
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
     try {
-        match("simb_semicolon");
-    }catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      match("simb_semicolon");
+    } catch (syntax_exc se) {
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
   }
 }
@@ -163,9 +157,8 @@ void Parser::dc_v() {
 void Parser::tipo_var() {
   if (token.get_type() != "simb_type" && token.get_type() != "simb_real") {
     output_file << "Erro sintático: " << token.get_value()
-              << " não é um tipo válido." << std::endl;
+                << " não é um tipo válido." << std::endl;
 
-    
     token = get_token();
     return;
   }
@@ -178,24 +171,24 @@ void Parser::tipo_var() {
  * @brief <variaveis> ::= ident <mais_var>
  */
 void Parser::variaveis() {
-    try{
-        match("id");
-    } catch (syntax_exc se) {
-        std::cout << "entra aqui" << std::endl;
-        output_file << se.what() << std::endl;
-        panic_mode();
-    }
-        // <mais_var>
-    while (token.get_type() == "simb_comma") {
+  try {
+    match("id");
+  } catch (syntax_exc se) {
+    output_file << se.what() << std::endl;
+    panic_mode();
+  }
+
+  // <mais_var> ::= , <variaveis> | λ
+  while (token.get_type() == "simb_comma") {
     // TODO: remove
-        try{
-            match("simb_comma");
-            match("id");
-        } catch (syntax_exc se) {
-            output_file << se.what() << std::endl;
-            panic_mode();
-        }
+    try {
+      match("simb_comma");
+      match("id");
+    } catch (syntax_exc se) {
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
+  }
 }
 
 /**
@@ -203,19 +196,19 @@ void Parser::variaveis() {
  */
 void Parser::dc_p() {
   while (token.get_type() == "simb_proc") {
-    try{
-        match("simb_proc");
-        match("id");
-        parametros();
+    try {
+      match("simb_proc");
+      match("id");
+      parametros();
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
     try {
-        match("simb_semicolon");
+      match("simb_semicolon");
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
     corpo_p();
   }
@@ -228,7 +221,6 @@ void Parser::parametros() {
   if (match("simb_lpar", true)) return;
   lista_par();
   match("simb_rpar");
-  
 }
 
 /**
@@ -239,7 +231,7 @@ void Parser::lista_par() {
   match("simb_colon");
   tipo_var();
 
-  // <mais_par>
+  // <mais_par> := ; <lista_par> | λ
   while (token.get_type() == "simb_semicolon") {
     match("simb_semicolon");
     variaveis();
@@ -253,24 +245,24 @@ void Parser::lista_par() {
  */
 void Parser::corpo_p() {
   dc_loc();
-  try{
-      match("simb_begin");
+  try {
+    match("simb_begin");
   } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+    output_file << se.what() << std::endl;
+    panic_mode();
   }
   comandos();
-  try{
-      match("simb_end");
+  try {
+    match("simb_end");
   } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+    output_file << se.what() << std::endl;
+    panic_mode();
   }
   try {
-        match("simb_semicolon");
+    match("simb_semicolon");
   } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+    output_file << se.what() << std::endl;
+    panic_mode();
   }
 }
 
@@ -292,28 +284,27 @@ void Parser::lista_arg() {
  * @brief <argumentos> ::= ident <mais_ident>
  */
 void Parser::argumentos() {
-  try{
+  try {
     match("id");
   } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+    output_file << se.what() << std::endl;
+    panic_mode();
   }
 
   // <mais_ident> = ; <argumentos> | λ
   while (token.get_type() == "simb_semicolon") {
-    try{
-        match("simb_semicolon");
-        match("id");
+    try {
+      match("simb_semicolon");
+      match("id");
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
   }
 }
 
 /**
  * @brief <pfalsa> ::= else <cmd> | λ
- *
  */
 void Parser::pfalsa() {
   if (match("simb_else", true)) return;
@@ -333,11 +324,11 @@ void Parser::comandos() {
          cur_token == "simb_if" || cur_token == "simb_begin" ||
          cur_token == "id") {
     cmd();
-    try{
-    match("simb_semicolon");
+    try {
+      match("simb_semicolon");
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
 
     // Update current token
@@ -358,40 +349,39 @@ void Parser::comandos() {
 void Parser::cmd() {
   std::string cur_token = token.get_type();
 
-
   try {
-      if (cur_token == "simb_read") {
-        match("simb_read");
-        match("simb_lpar");
-        variaveis();
-        match("simb_rpar");
+    if (cur_token == "simb_read") {
+      match("simb_read");
+      match("simb_lpar");
+      variaveis();
+      match("simb_rpar");
 
-        return;
-      }
+      return;
+    }
 
-      if (cur_token == "simb_write") {
-        match("simb_write");
-        match("simb_lpar");
-        variaveis();
-        match("simb_rpar");
+    if (cur_token == "simb_write") {
+      match("simb_write");
+      match("simb_lpar");
+      variaveis();
+      match("simb_rpar");
 
-        return;
-      }
+      return;
+    }
   } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+    output_file << se.what() << std::endl;
+    panic_mode();
   }
 
   if (cur_token == "simb_while") {
     try {
-        match("simb_while");
-        match("simb_lpar");
-        condicao();
-        match("simb_rpar");
-        match("simb_do");
+      match("simb_while");
+      match("simb_lpar");
+      condicao();
+      match("simb_rpar");
+      match("simb_do");
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
     cmd();
 
@@ -400,16 +390,16 @@ void Parser::cmd() {
 
   if (cur_token == "simb_for") {
     try {
-        match("simb_for");
-        match("id");
-        match("simb_atrib");
-        expressao();
-        match("simb_to");
-        expressao();
-        match("simb_do");
+      match("simb_for");
+      match("id");
+      match("simb_atrib");
+      expressao();
+      match("simb_to");
+      expressao();
+      match("simb_do");
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
     cmd();
 
@@ -418,12 +408,12 @@ void Parser::cmd() {
 
   if (cur_token == "simb_if") {
     try {
-        match("simb_if");
-        condicao();
-        match("simb_then");
+      match("simb_if");
+      condicao();
+      match("simb_then");
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
     cmd();
     pfalsa();
@@ -431,29 +421,29 @@ void Parser::cmd() {
   }
 
   if (cur_token == "id") {
-    try{
-        match("id");
-        cmd_ident_tail();
+    try {
+      match("id");
+      cmd_ident_tail();
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
     return;
   }
 
   if (cur_token == "simb_begin") {
-    try{
-        match("simb_begin");
+    try {
+      match("simb_begin");
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
     comandos();
-    try{
-        match("simb_end");
+    try {
+      match("simb_end");
     } catch (syntax_exc se) {
-        output_file << se.what() << std::endl;
-        panic_mode();
+      output_file << se.what() << std::endl;
+      panic_mode();
     }
     return;
   }
@@ -488,7 +478,7 @@ void Parser::relacao() {
       token.get_type() != "simb_geq" && token.get_type() != "simb_leq" &&
       token.get_type() != "simb_lesser" && token.get_type() != "simb_greater") {
     output_file << "Erro sintático: " << token.get_value()
-              << " não é uma relacao valida." << std::endl;
+                << " não é uma relacao valida." << std::endl;
     return;
   }
 
@@ -539,7 +529,7 @@ void Parser::op_ad() {
     return;
   } else {
     output_file << "Erro sintático: " << token.get_value()
-              << " não é uma operacao valida." << std::endl;
+                << " não é uma operacao valida." << std::endl;
   }
 }
 
@@ -571,7 +561,7 @@ void Parser::op_mul() {
   if (token.get_type() != "simb_multiply" &&
       token.get_type() != "simb_divide") {
     output_file << "Erro sintático: " << token.get_value()
-              << " não é uma operação valida." << std::endl;
+                << " não é uma operação valida." << std::endl;
     token = get_token();
     return;
   }
@@ -595,7 +585,7 @@ void Parser::fator() {
     match("simb_rpar");
   } else {
     output_file << "Erro sintático: " << token.get_value()
-              << " não é um fator válido." << std::endl;
+                << " não é um fator válido." << std::endl;
     token = get_token();
     return;
   }
@@ -608,7 +598,7 @@ void Parser::numero() {
   if (token.get_type() != "integer_number" &&
       token.get_type() != "real_number") {
     output_file << "Erro sintático: " << token.get_value()
-              << " não é número real ou inteiro." << std::endl;
+                << " não é número real ou inteiro." << std::endl;
     return;
   }
 
@@ -628,7 +618,7 @@ Parser::Parser(const std::string& filename) { file.open(filename); }
 Parser::~Parser() { file.close(); }
 
 /**
- * @brief
+ * @brief Get a token from the lexical parser
  *
  * @return Token
  */

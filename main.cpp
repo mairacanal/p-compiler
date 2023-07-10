@@ -9,8 +9,6 @@ int main() {
   std::cout << "Insert the input filename: ";
   std::cin >> filename;
 
-  
-
   Parser parser{filename};
 
   parser.parse();
