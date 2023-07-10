@@ -3,13 +3,13 @@ p, id
 ;, simb_semicolon
 var, simb_var
 x, id
-@, Error ("Wrong character input")
+Erro Léxico: "Entrada de caracter inválido"
 :, simb_colon
 integer, simb_type
 ;, simb_semicolon
 begin, simb_begin
 x, id
-:=, symb_atrib
+:=, simb_atrib
 1, integer_number
 ;, simb_semicolon
 while, simb_while
@@ -20,7 +20,7 @@ x, id
 ), simb_rpar
 do, simb_do
 x, id
-:=, symb_atrib
+:=, simb_atrib
 x, id
 +, simb_plus
 1, integer_number

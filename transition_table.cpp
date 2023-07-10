@@ -30,7 +30,7 @@ std::map<unsigned int, State> states = {
           {'>', 10},         {'<', 11},          {'/', 21},
           {'_', 19},         {'*', 22},          {';', 39},
           {'(', 36},         {')', 37},          {',', 38},
-          {'.', 44},         {'\0', 43}},
+          {'.', 44},         {'=', 45},          {'\0', 43}},
      }},
 
     {1,
@@ -143,4 +143,6 @@ std::map<unsigned int, State> states = {
     {43, {true, false, "Erro Léxico: \"Entrada de caracter inválido\"", {}}},
 
     {44, {true, false, "simb_dot", {}}},
+
+    {45, {true, false, "simb_equal", {}}},
 };

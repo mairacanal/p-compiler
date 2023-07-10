@@ -25,8 +25,7 @@ class syntax_exc : public std::exception {
 
 
 bool Parser::match(const std::string& exp_token, bool empty) {
-  // TODO: remove
-  std::cout << token << std::endl;
+  output_file << token << std::endl;
 
   if (token.get_type() != exp_token) {
     if (empty) return true;
@@ -34,7 +33,8 @@ bool Parser::match(const std::string& exp_token, bool empty) {
 
     throw syntax_exc(err_msg.c_str());
   }
-
+  char l;
+  //std::cin >> l;
   token = get_token();
   return false;
 }
@@ -112,17 +112,16 @@ void Parser::dc_c() {
 
     token = get_token();
     try{
-        // TODO: add const to the transition table
-        // match("simb_const");
+        match("simb_const");
         match("id");
-        // TODO: add simb_equal to the transition table
-        // match("simb_equal")
+        match("simb_equal")
         numero();
         match("simb_semicolon");
     } catch (syntax_exc se) {
         std::cout << se.what() << std::endl;
         panic_mode();
     }
+
   }
 }
 
@@ -131,12 +130,9 @@ void Parser::dc_c() {
  */
 void Parser::dc_v() {
   while (token.get_type() == "simb_var") {
-    // TODO: remove
-    std::cout << token << std::endl;
-
-    token = get_token();
     variaveis();
     try{
+        match("simb_var");
         match("simb_colon");
         tipo_var();
         match("simb_semicolon");
@@ -152,14 +148,15 @@ void Parser::dc_v() {
  */
 void Parser::tipo_var() {
   if (token.get_type() != "simb_type" && token.get_type() != "simb_real") {
-    std::cout << "Erro sintático: " << token.get_value()
+    output_file << "Erro sintático: " << token.get_value()
               << " não é um tipo válido." << std::endl;
+
+    
     token = get_token();
     return;
   }
 
-  // TODO: remover
-  std::cout << token << std::endl;
+  output_file << token << std::endl;
   token = get_token();
 }
 
@@ -177,9 +174,7 @@ void Parser::variaveis() {
     while (token.get_type() == "simb_comma") {
     // TODO: remove
         try{
-            std::cout << token << std::endl;
-            token = get_token();
-
+            match("simb_comma");
             match("id");
         } catch (syntax_exc se) {
             std::cout << se.what() << std::endl;
@@ -213,6 +208,7 @@ void Parser::parametros() {
   if (match("simb_lpar", true)) return;
   lista_par();
   match("simb_rpar");
+  
 }
 
 /**
@@ -264,7 +260,7 @@ void Parser::dc_loc() { dc_v(); }
 void Parser::lista_arg() {
   if (match("simb_lpar", true)) return;
   argumentos();
-  match("simp_rpar");
+  match("simb_rpar");
 }
 
 /**
@@ -278,7 +274,7 @@ void Parser::argumentos() {
         panic_mode();
   }
 
-  // <mais_ident>
+  // <mais_ident> = ; <argumentos> | λ
   while (token.get_type() == "simb_semicolon") {
     try{
         match("simb_semicolon");
@@ -300,18 +296,6 @@ void Parser::pfalsa() {
 }
 
 /**
- * @brief cmd_ident_tail ::= := <expressao> | <lista_arg>
- */
-void Parser::cmd_ident_tail() {
-  // Check if current_token is :=
-  if (token.get_type() == "simb_atrib") {
-    match("simb_atrib");
-    expressao();
-  } else
-    lista_arg();
-}
-
-/**
  * @brief <comandos> ::= <cmd> ; <comandos> | λ
  */
 void Parser::comandos() {
@@ -320,8 +304,9 @@ void Parser::comandos() {
 
   // First(<cmd>)
   while (cur_token == "simb_read" || cur_token == "simb_write" ||
-         cur_token == "simb_while" || cur_token == "simb_if" ||
-         cur_token == "simb_begin" || cur_token == "id") {
+         cur_token == "simb_while" || cur_token == "simb_for" ||
+         cur_token == "simb_if" || cur_token == "simb_begin" ||
+         cur_token == "id") {
     cmd();
     try{
     match("simb_semicolon");
@@ -348,6 +333,7 @@ void Parser::comandos() {
 void Parser::cmd() {
   std::string cur_token = token.get_type();
 
+<<<<<<< HEAD
   try {
       if (cur_token == "simb_read") {
         match("simb_read");
@@ -449,6 +435,18 @@ void Parser::cmd() {
 }
 
 /**
+ * @brief cmd_ident_tail ::= := <expressao> | <lista_arg>
+ */
+void Parser::cmd_ident_tail() {
+  // Check if current_token is :=
+  if (token.get_type() == "simb_atrib") {
+    match("simb_atrib");
+    expressao();
+  } else
+    lista_arg();
+}
+
+/**
  * @brief <condicao> ::= <expressao> <relacao> <expressao>
  */
 void Parser::condicao() {
@@ -464,14 +462,13 @@ void Parser::relacao() {
   if (token.get_type() != "simb_equal" && token.get_type() != "simb_diff" &&
       token.get_type() != "simb_geq" && token.get_type() != "simb_leq" &&
       token.get_type() != "simb_lesser" && token.get_type() != "simb_greater") {
-    std::cout << "Erro sintático: " << token.get_value()
+    output_file << "Erro sintático: " << token.get_value()
               << " não é uma relacao valida." << std::endl;
     token = get_token();
     return;
   }
 
-  // TODO: tirar
-  std::cout << token << std::endl;
+  output_file << token << std::endl;
   token = get_token();
 }
 
@@ -488,8 +485,7 @@ void Parser::expressao() {
  */
 void Parser::op_un() {
   if (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    // TODO: remover
-    std::cout << token << std::endl;
+    output_file << token << std::endl;
 
     token = get_token();
     return;
@@ -501,8 +497,7 @@ void Parser::op_un() {
  */
 void Parser::outros_termos() {
   while (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    // TODO: remover
-    std::cout << token << std::endl;
+    output_file << token << std::endl;
 
     token = get_token();
     termo();
@@ -515,13 +510,12 @@ void Parser::outros_termos() {
  */
 void Parser::op_ad() {
   if (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    // TODO: remover
-    std::cout << token << std::endl;
+    output_file << token << std::endl;
     token = get_token();
     return;
   } else {
     token = get_token();
-    std::cout << "Erro sintático: " << token.get_value()
+    output_file << "Erro sintático: " << token.get_value()
               << " não é uma operacao valida." << std::endl;
   }
 }
@@ -539,7 +533,9 @@ void Parser::termo() {
  * @brief <mais_fatores> ::= <op_mul> <fator> <mais_fatores> | λ
  */
 void Parser::mais_fatores() {
-  while (token.get_type() == "simb_mul" || token.get_type() == "simb_divide") {
+  while (token.get_type() == "simb_multiply" ||
+         token.get_type() == "simb_divide") {
+    output_file << token << std::endl;
     token = get_token();
     fator();
   }
@@ -551,13 +547,12 @@ void Parser::mais_fatores() {
 void Parser::op_mul() {
   if (token.get_type() != "simb_multiply" &&
       token.get_type() != "simb_divide") {
-    std::cout << "Erro sintático: " << token.get_value()
+    output_file << "Erro sintático: " << token.get_value()
               << " não é uma operação valida." << std::endl;
     token = get_token();
     return;
   }
-  // TODO: remover
-  std::cout << token << std::endl;
+  output_file << token << std::endl;
   token = get_token();
 }
 
@@ -589,7 +584,7 @@ void Parser::fator() {
 void Parser::numero() {
   if (token.get_type() != "integer_number" &&
       token.get_type() != "real_number") {
-    std::cout << "Erro sintático: " << token.get_value()
+    output_file << "Erro sintático: " << token.get_value()
               << " não é número real ou inteiro." << std::endl;
     return;
   }
@@ -621,7 +616,7 @@ Token Parser::get_token() {
     token = lexical.next(c);
     if (token) {
       if (!token.value().get_type().find("Erro Léxico"))
-        std::cout << token.value().get_type() << std::endl;
+        output_file << token.value().get_type() << std::endl;
       else
         return token.value();
     }
@@ -633,7 +628,7 @@ Token Parser::get_token() {
     token = lexical.next(c);
     if (token) {
       if (!token.value().get_type().find("Erro Léxico"))
-        std::cout << token.value().get_type() << std::endl;
+        output_file << token.value().get_type() << std::endl;
       else
         return token.value();
     }
@@ -647,6 +642,8 @@ Token Parser::get_token() {
  *
  */
 void Parser::parse() {
+  output_file.open("output.txt");
+
   token = get_token();
   programa();
 

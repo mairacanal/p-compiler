@@ -11,6 +11,7 @@ class Parser {
  private:
   LexicalParser lexical;
   std::ifstream file;
+  std::ofstream output_file;
   Token token;
   std::map<std::string, std::string> symbol_table = {
         {"program", "simb_program"}, {"var", "simb_var"},

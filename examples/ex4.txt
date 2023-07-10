@@ -1,0 +1,26 @@
+program leimprime;
+{exemplo 2}
+
+const b = 10;
+var x: real;
+
+procedure nomep(x: real);
+var y: integer;
+var a, c: integer;
+
+begin
+  x := 2.5;
+  read(c, a);
+  if a < x + c then
+  begin
+    a := c + 3;
+    write(a);
+  end
+  else
+    c := a + 3;
+end;
+
+begin {programa principal}
+  read(b);
+  nomep(x);
+end.
