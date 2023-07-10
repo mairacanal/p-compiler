@@ -1,6 +1,6 @@
 program fatorial;
 {exemplo 1}
-var x, aux, fat: integer;
+var x, aux, fat integer;
 begin
 read(x);
 fat:=1;

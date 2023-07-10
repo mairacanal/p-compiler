@@ -2,6 +2,8 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
+#include <cstring>
 #include <exception>
 
 #include "lexical_parser.hpp"
