@@ -12,7 +12,6 @@ int main() {
   Parser parser{filename};
 
   parser.parse();
-  std::cout << std::endl;
   std::cout << "Output of the parser was saved on the file output.txt."
             << std::endl;
 }
