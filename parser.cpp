@@ -19,7 +19,7 @@ class SyntaxException : public std::exception {
  */
 
 bool Parser::match(const std::string& exp_token, bool empty) {
-  // output_file << token << std::endl;
+  output_file << token << std::endl;
 
   if (token.get_type() != exp_token) {
     if (empty) return true;
@@ -270,7 +270,13 @@ void Parser::dc_loc() { dc_v(); }
  * @brief <lista_arg> ::= ( <argumentos> ) | λ
  */
 void Parser::lista_arg() {
-  if (match("simb_lpar", true)) return;
+  if (match("simb_lpar", true)) {
+    throw SyntaxException("Erro Sintático na linha " +
+                          std::to_string(token.get_line()) +
+                          ": esperava simb_attrib ou simb_lpar, foi recebido " +
+                          token.get_value());
+    return;
+  }
   argumentos();
   match("simb_rpar");
 }
@@ -378,12 +384,12 @@ void Parser::cmd() {
       condicao();
       match("simb_rpar");
       match("simb_do");
-      cmd();
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
       panic_mode({"simb_read", "simb_write", "simb_while", "simb_for",
                   "simb_if", "id", "simb_begin", "simb_end", "simb_semicolon"});
     }
+    cmd();
 
     return;
   }

@@ -1,7 +1,41 @@
+program, simb_program
+meu_programa, id
+;, simb_semicolon
+var, simb_var
+a, id
+,, simb_comma
 Erro na linha 2: Erro Léxico: "Má formação de número"
+:, simb_colon
 Erro Sintático na linha 2: esperava id foi recebido :
+:, simb_colon
 integer, simb_type
+;, simb_semicolon
+begin, simb_begin
+read, simb_read
+(, simb_lpar
+a, id
+,, simb_comma
+b, id
+), simb_rpar
+;, simb_semicolon
+while, simb_while
+(, simb_lpar
+b, id
 >, simb_greater
+a, id
+do, simb_do
 Erro Sintático na linha 4: esperava simb_rpar foi recebido do
-Erro Sintático na linha 4: esperava simb_semicolon foi recebido begin
-Erro Sintático na linha 6: esperava simb_dot foi recebido ;
+begin, simb_begin
+write, simb_write
+(, simb_lpar
+a, id
+), simb_rpar
+;, simb_semicolon
+a, id
+=, simb_equal
+Erro Sintático na linha 5: esperava simb_attrib ou simb_lpar, foi recebido =
+;, simb_semicolon
+end, simb_end
+;, simb_semicolon
+end, simb_end
+., simb_dot
