@@ -5,6 +5,6 @@ begin
     while(b>a do
         begin
         write(a);
-        a=a+1;
-        end;
+        a;
+    end;
 end.

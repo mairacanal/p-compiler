@@ -269,16 +269,11 @@ void Parser::dc_loc() { dc_v(); }
 /**
  * @brief <lista_arg> ::= ( <argumentos> ) | λ
  */
-void Parser::lista_arg() {
-  if (match("simb_lpar", true)) {
-    throw SyntaxException("Erro Sintático na linha " +
-                          std::to_string(token.get_line()) +
-                          ": esperava simb_attrib ou simb_lpar, foi recebido " +
-                          token.get_value());
-    return;
-  }
+bool Parser::lista_arg() {
+  if (match("simb_lpar", true))  return true;
   argumentos();
   match("simb_rpar");
+  return false;
 }
 
 /**
@@ -329,7 +324,7 @@ void Parser::comandos() {
       match("simb_semicolon");
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode({"simb_end"});
+      panic_mode({"simb_end", "simb_begin"});
     }
 
     // Update current token
@@ -361,7 +356,8 @@ void Parser::cmd() {
     }
   } catch (const SyntaxException& se) {
     output_file << se.panic() << std::endl;
-    panic_mode({"simb_semicolon"});
+    panic_mode({"simb_read", "simb_write", "simb_while", "simb_for",
+                  "simb_if", "id", "simb_begin", "simb_end", "simb_semicolon"});
   }
   try {
     if (cur_token == "simb_write") {
@@ -369,12 +365,12 @@ void Parser::cmd() {
       match("simb_lpar");
       variaveis();
       match("simb_rpar");
-
       return;
     }
   } catch (const SyntaxException& se) {
     output_file << se.panic() << std::endl;
-    panic_mode({"simb_semicolon"});
+    panic_mode({"simb_read", "simb_write", "simb_while", "simb_for",
+                  "simb_if", "id", "simb_begin", "simb_end", "simb_semicolon"});
   }
 
   if (cur_token == "simb_while") {
@@ -403,13 +399,12 @@ void Parser::cmd() {
       match("simb_to");
       expressao();
       match("simb_do");
-      cmd();
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
       panic_mode({"simb_read", "simb_write", "simb_while", "simb_for",
                   "simb_if", "id", "simb_begin", "simb_end", "simb_semicolon"});
     }
-
+    cmd();
     return;
   }
 
@@ -418,12 +413,12 @@ void Parser::cmd() {
       match("simb_if");
       condicao();
       match("simb_then");
-      cmd();
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
       panic_mode({"simb_read", "simb_write", "simb_while", "simb_for",
                   "simb_if", "id", "simb_begin", "simb_end", "simb_semicolon"});
     }
+    cmd();
     pfalsa();
     return;
   }
@@ -434,7 +429,8 @@ void Parser::cmd() {
       cmd_ident_tail();
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode({"simb_semicolon"});
+      panic_mode({"simb_read", "simb_write", "simb_while", "simb_for",
+                  "simb_if", "id", "simb_begin", "simb_semicolon"});
     }
     return;
   }
@@ -445,14 +441,15 @@ void Parser::cmd() {
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
       panic_mode({"simb_read", "simb_write", "simb_while", "simb_for",
-                  "simb_if", "simb_begin", "id"});
+                  "simb_if", "simb_begin", "id", "simb_end", "simb_semicolon"});
     }
     comandos();
     try {
       match("simb_end");
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode({"simb_semicolon"});
+      panic_mode({"simb_read", "simb_write", "simb_while", "simb_for",
+                  "simb_if", "simb_begin", "id", "simb_end", "simb_semicolon"});
     }
     return;
   }
@@ -466,8 +463,7 @@ void Parser::cmd_ident_tail() {
   if (token.get_type() == "simb_atrib") {
     match("simb_atrib");
     expressao();
-  } else
-    lista_arg();
+  } else lista_arg();
 }
 
 /**

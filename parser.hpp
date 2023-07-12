@@ -56,7 +56,7 @@ class Parser {
 
   void dc_loc();
 
-  void lista_arg();
+  bool lista_arg();
 
   void argumentos();
 
