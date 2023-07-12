@@ -19,14 +19,13 @@ class SyntaxException : public std::exception {
  */
 
 bool Parser::match(const std::string& exp_token, bool empty) {
-  output_file << token << std::endl;
-
   if (token.get_type() != exp_token) {
     if (empty) return true;
     throw SyntaxException("Erro Sintático na linha " +
-                          std::to_string(token.get_line()) + ": esperava " +
+                          std::to_string(token.get_line() - 1) + ": esperava " +
                           exp_token + " foi recebido " + token.get_value());
   }
+  output_file << token << std::endl;
   token = get_token();
   return false;
 }
@@ -626,7 +625,6 @@ void Parser::numero() {
  */
 Parser::Parser(const std::string& filename) {
   file.open(filename);
-  line_number = 1;
 }
 
 /**
@@ -640,39 +638,37 @@ Parser::~Parser() { file.close(); }
  * @return Token
  */
 Token Parser::get_token() {
-  if (lexical.should_go_back()) {
-    std::optional<Token> token{};
 
+  if (lexical.should_go_back()) {
+
+    std::optional<Token> token{};
     token = lexical.next(c, line_number);
     if (token) {
-      if (!token.value().get_type().find("Erro Léxico"))
+        if (!token.value().get_type().find("Erro Léxico"))
         output_file << "Erro na linha " << token.value().get_line() << ": "
                     << token.value().get_type() << std::endl;
       else
         return token.value();
     }
   }
-
   // TODO Remove
-  std::cout << "Line numbe: " << line_number << std::endl;
 
   while (file >> std::noskipws >> c) {
     std::optional<Token> token{};
+ 
 
     token = lexical.next(c, line_number);
+   if(c == '\n')
+        line_number++;
+
     if (token) {
-      if (!token.value().get_type().find("Erro Léxico"))
-        output_file << "Erro na linha " << token.value().get_line() << ": "
+       if (!token.value().get_type().find("Erro Léxico"))
+        output_file << "Erro na linha " << line_number << ": "
                     << token.value().get_type() << std::endl;
       else
         return token.value();
     }
-
-    if (c == '\n') {
-      line_number++;
-    }
   }
-
   return Token{};
 }
 
@@ -682,6 +678,7 @@ Token Parser::get_token() {
  */
 void Parser::parse() {
   output_file.open("output.txt");
+  line_number = 1;
 
   token = get_token();
   programa();

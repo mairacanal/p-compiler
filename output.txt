@@ -4,9 +4,7 @@ meu_programa, id
 var, simb_var
 a, id
 ,, simb_comma
-Erro na linha 2: Erro Léxico: "Má formação de número"
-:, simb_colon
-Erro Sintático na linha 2: esperava id foi recebido :
+b, id
 :, simb_colon
 integer, simb_type
 ;, simb_semicolon
@@ -23,8 +21,7 @@ while, simb_while
 b, id
 >, simb_greater
 a, id
-do, simb_do
-Erro Sintático na linha 4: esperava simb_rpar foi recebido do
+Erro Sintático na linha 5: esperava simb_rpar foi recebido do
 begin, simb_begin
 write, simb_write
 (, simb_lpar
@@ -32,9 +29,7 @@ a, id
 ), simb_rpar
 ;, simb_semicolon
 a, id
-=, simb_equal
-Erro Sintático na linha 5: esperava simb_attrib ou simb_lpar, foi recebido =
-;, simb_semicolon
+Erro Sintático na linha 8: esperava simb_semicolon foi recebido end
 end, simb_end
 ;, simb_semicolon
 end, simb_end
