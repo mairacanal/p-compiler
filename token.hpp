@@ -7,13 +7,11 @@ class Token {
  private:
   std::string value;
   std::string type;
-  int line;
 
  public:
   Token() : value{}, type{} {}
 
-  Token(std::string value, std::string type, int line)
-      : value{value}, type{type}, line{line} {}
+  Token(std::string value, std::string type) : value{value}, type{type} {}
 
   /**
    * @brief Overloaded insertion operator for printing a Token object to an
@@ -37,6 +35,4 @@ class Token {
   auto get_type() -> std::string { return type; }
 
   auto get_value() -> std::string { return value; }
-
-  auto get_line() -> int { return line; }
 };
