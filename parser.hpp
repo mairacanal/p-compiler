@@ -15,6 +15,7 @@ class Parser {
   std::ifstream file;
   std::ofstream output_file;
   Token token;
+  int line_number;
   std::map<std::string, std::string> symbol_table = {
       {"program", "simb_program"}, {"var", "simb_var"},
       {"begin", "simb_begin"},     {"procedure", "simb_proc"},

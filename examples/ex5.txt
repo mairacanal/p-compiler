@@ -1,0 +1,10 @@
+program meu_programa;
+var a, 1b: integer;
+begin
+    read(a,b);
+    while(b>a do
+        begin
+        write(a);
+        a=a+1;
+        end;
+end.

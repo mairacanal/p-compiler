@@ -1,0 +1,7 @@
+Erro na linha 2: Erro Léxico: "Má formação de número"
+Erro Sintático na linha 2: esperava id foi recebido :
+integer, simb_type
+>, simb_greater
+Erro Sintático na linha 4: esperava simb_rpar foi recebido do
+Erro Sintático na linha 4: esperava simb_semicolon foi recebido begin
+Erro Sintático na linha 6: esperava simb_dot foi recebido ;
