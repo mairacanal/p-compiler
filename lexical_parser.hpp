@@ -54,15 +54,15 @@ class LexicalParser {
    * @return An optional Token object if a token is generated, otherwise an
    * empty optional.
    */
-  auto next(const char &c, int line_number) -> std::optional<Token> {
+  auto next(const char &c, int &line_number) -> std::optional<Token> {
     auto to_stack = states[state].add_to_stack(c);
-    if(c == '\n')
-        line_number++;
 
     state = states[state][c];
     go_back = states[state].should_go_back();
 
-    if (to_stack) stack += c;
+    if (to_stack) {
+      stack += c;
+    }
 
     if (states[state].is_final_state()) {
       std::string value = stack;

@@ -28,6 +28,10 @@ class Parser {
   };
   char c;
 
+  bool flag_err = false;
+
+  bool flag_lex = false;
+
   bool match(const std::string& exp_token, bool empty = false);
 
   void panic_mode(const std::vector<std::string>& sync_tokens);
