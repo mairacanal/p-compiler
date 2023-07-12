@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "lexical_parser.hpp"
 #include "token.hpp"
@@ -28,7 +29,7 @@ class Parser {
 
   bool match(const std::string& exp_token, bool empty = false);
 
-  void panic_mode();
+  void panic_mode(const std::vector<std::string>& sync_tokens);
 
   void programa();
 

@@ -2,11 +2,11 @@ program fatorial;
 {exemplo 1}
 var x, aux, fat integer;
 begin
-read(x);
+read x);
 fat:=1;
-for aux:=1 to x do
+for aux:1 to x do
 begin
 fat:=fat*aux;
-end;
-write(fat);
+end
+write(fat;
 end.

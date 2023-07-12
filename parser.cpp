@@ -40,7 +40,7 @@ void Parser::programa() {
     match("simb_semicolon");
   } catch (const SyntaxException& se) {
     output_file << se.panic() << std::endl;
-    panic_mode();
+    panic_mode({"simb_const", "simb_var", "simb_proc", "simb_begin"});
   }
   corpo();
   try {
@@ -50,11 +50,11 @@ void Parser::programa() {
   }
 }
 
-void Parser::panic_mode() {
+void Parser::panic_mode(const std::vector<std::string>& sync_tokens) {
   bool flag = false;
   while (!flag) {
-    for (const auto& kv : symbol_table)
-      if (token.get_type() == kv.second) {
+    for (const auto& st : sync_tokens)
+      if (token.get_type() == st) {
         flag = true;
         return;
       }
@@ -71,14 +71,14 @@ void Parser::corpo() {
     match("simb_begin");
   } catch (const SyntaxException& se) {
     output_file << se.panic() << std::endl;
-    panic_mode();
+    panic_mode({"simb_read", "simb_write", "simb_while", "simb_for", "simb_if", "simb_begin", "id"});
   }
   comandos();
   try {
     match("simb_end");
   } catch (const SyntaxException& se) {
     output_file << se.panic() << std::endl;
-    panic_mode();
+    panic_mode({"simb_dot"});
   }
 }
 
@@ -103,13 +103,13 @@ void Parser::dc_c() {
       numero();
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_semicolon"});
     }
     try {
       match("simb_semicolon");
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_var", "simb_proc", "simb_begin"});
     }
   }
 }
@@ -123,7 +123,7 @@ void Parser::dc_v() {
       match("simb_var");
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"id"});
     }
     variaveis();
     try {
@@ -131,13 +131,13 @@ void Parser::dc_v() {
       tipo_var();
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_semicolon"});
     }
     try {
       match("simb_semicolon");
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_proc", "simb_begin"});
     }
   }
 }
@@ -166,7 +166,7 @@ void Parser::variaveis() {
     match("id");
   } catch (const SyntaxException& se) {
     output_file << se.panic() << std::endl;
-    panic_mode();
+    panic_mode({"simb_colon", "simb_rpar"});
   }
 
   // <mais_var> ::= , <variaveis> | λ
@@ -177,7 +177,7 @@ void Parser::variaveis() {
       match("id");
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_comma", "simb_colon", "simb_rpar"});
     }
   }
 }
@@ -193,13 +193,13 @@ void Parser::dc_p() {
       parametros();
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_semicolon"});
     }
     try {
       match("simb_semicolon");
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+    panic_mode({"simb_var", "simb_begin"});
     }
     corpo_p();
   }
@@ -240,20 +240,20 @@ void Parser::corpo_p() {
     match("simb_begin");
   } catch (const SyntaxException& se) {
     output_file << se.panic() << std::endl;
-    panic_mode();
+    panic_mode({"simb_read", "simb_write", "simb_while", "simb_for", "simb_if", "simb_begin", "id"});
   }
   comandos();
   try {
     match("simb_end");
   } catch (const SyntaxException& se) {
     output_file << se.panic() << std::endl;
-    panic_mode();
+    panic_mode({"simb_semicolon"});
   }
   try {
     match("simb_semicolon");
   } catch (const SyntaxException& se) {
     output_file << se.panic() << std::endl;
-    panic_mode();
+    panic_mode({"simb_begin"});
   }
 }
 
@@ -279,7 +279,7 @@ void Parser::argumentos() {
     match("id");
   } catch (const SyntaxException& se) {
     output_file << se.panic() << std::endl;
-    panic_mode();
+    panic_mode({"simb_semicolon", "simb_rpar"});
   }
 
   // <mais_ident> = ; <argumentos> | λ
@@ -289,7 +289,7 @@ void Parser::argumentos() {
       match("id");
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"id", "simb_semicolon", "simb_rpar"});
     }
   }
 }
@@ -319,7 +319,7 @@ void Parser::comandos() {
       match("simb_semicolon");
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_end"});
     }
 
     // Update current token
@@ -349,7 +349,11 @@ void Parser::cmd() {
 
       return;
     }
-
+  }catch(const SyntaxException& se) {
+    output_file << se.panic() << std::endl;
+    panic_mode({"simb_semicolon"});
+  }
+try{
     if (cur_token == "simb_write") {
       match("simb_write");
       match("simb_lpar");
@@ -360,7 +364,7 @@ void Parser::cmd() {
     }
   } catch (const SyntaxException& se) {
     output_file << se.panic() << std::endl;
-    panic_mode();
+    panic_mode({"simb_semicolon"});
   }
 
   if (cur_token == "simb_while") {
@@ -370,11 +374,12 @@ void Parser::cmd() {
       condicao();
       match("simb_rpar");
       match("simb_do");
+      cmd(); 
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_read", "simb_write", "simb_while", "simb_for", "simb_if", "id", "simb_begin", "simb_end", "simb_semicolon"});
     }
-    cmd();
+
 
     return;
   }
@@ -388,11 +393,12 @@ void Parser::cmd() {
       match("simb_to");
       expressao();
       match("simb_do");
+    cmd();
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_read", "simb_write", "simb_while", "simb_for", "simb_if", "id", "simb_begin", "simb_end", "simb_semicolon"});
     }
-    cmd();
+
 
     return;
   }
@@ -402,11 +408,11 @@ void Parser::cmd() {
       match("simb_if");
       condicao();
       match("simb_then");
+    cmd();
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_read", "simb_write", "simb_while", "simb_for", "simb_if", "id", "simb_begin", "simb_end", "simb_semicolon"});
     }
-    cmd();
     pfalsa();
     return;
   }
@@ -417,7 +423,7 @@ void Parser::cmd() {
       cmd_ident_tail();
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_semicolon"});
     }
     return;
   }
@@ -427,14 +433,14 @@ void Parser::cmd() {
       match("simb_begin");
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_read", "simb_write", "simb_while", "simb_for", "simb_if", "simb_begin", "id"});
     }
     comandos();
     try {
       match("simb_end");
     } catch (const SyntaxException& se) {
       output_file << se.panic() << std::endl;
-      panic_mode();
+      panic_mode({"simb_semicolon"});
     }
     return;
   }
