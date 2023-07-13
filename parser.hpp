@@ -15,6 +15,7 @@ class Parser {
   std::ifstream file;
   std::ofstream output_file;
   Token token;
+  int line_number;
   std::map<std::string, std::string> symbol_table = {
       {"program", "simb_program"}, {"var", "simb_var"},
       {"begin", "simb_begin"},     {"procedure", "simb_proc"},
@@ -26,6 +27,10 @@ class Parser {
       {"then", "simb_then"},       {"else", "simb_else"},
   };
   char c;
+
+  bool flag_err = false;
+
+  bool flag_lex = false;
 
   bool match(const std::string& exp_token, bool empty = false);
 
@@ -55,7 +60,7 @@ class Parser {
 
   void dc_loc();
 
-  void lista_arg();
+  bool lista_arg();
 
   void argumentos();
 
