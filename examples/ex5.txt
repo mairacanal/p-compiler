@@ -1,5 +1,5 @@
 program meu_programa;
-var a, b: integer;
+var a, 1b: integer;
 begin
     read(a,b);
     while(b>a do

@@ -23,11 +23,10 @@ bool Parser::match(const std::string& exp_token, bool empty) {
     if (empty) return true;
     flag_err = true;
     if (!flag_lex)
-      throw SyntaxException("Erro Sintático na linha " +
-                            std::to_string(token.get_line()) + ": esperava " +
-                            exp_token + " foi recebido " + token.get_value());
+      throw SyntaxException("Erro Sintático: esperava " + exp_token +
+                            " foi recebido " + token.get_value());
   }
-  output_file << token << std::endl;
+
   token = get_token();
   return false;
 }
@@ -53,6 +52,8 @@ void Parser::programa() {
 }
 
 void Parser::panic_mode(const std::vector<std::string>& sync_tokens) {
+  unsigned int initial_line_number =
+      line_number;  // Store the initial line number
   bool flag = false;
   while (!flag) {
     for (const auto& st : sync_tokens)
@@ -61,6 +62,12 @@ void Parser::panic_mode(const std::vector<std::string>& sync_tokens) {
         return;
       }
     token = get_token();
+  }
+
+  // If the line number was incremented during panic mode, revert it to the
+  // initial line number
+  if (line_number > initial_line_number) {
+    line_number = initial_line_number;
   }
 }
 
@@ -150,15 +157,13 @@ void Parser::dc_v() {
  */
 void Parser::tipo_var() {
   if (token.get_type() != "simb_type" && token.get_type() != "simb_real") {
-    output_file << "Erro sintático na linha" +
-                       std::to_string(token.get_line()) + ": "
-                << token.get_value() << " não é um tipo válido." << std::endl;
+    output_file << "Erro Sintático: " << token.get_value()
+                << " não é um tipo válido." << std::endl;
 
     token = get_token();
     return;
   }
 
-  output_file << token << std::endl;
   token = get_token();
 }
 
@@ -486,14 +491,11 @@ void Parser::relacao() {
   if (token.get_type() != "simb_equal" && token.get_type() != "simb_diff" &&
       token.get_type() != "simb_geq" && token.get_type() != "simb_leq" &&
       token.get_type() != "simb_lesser" && token.get_type() != "simb_greater") {
-    output_file << "Erro sintático na linha " +
-                       std::to_string(token.get_line()) + " : "
-                << token.get_value() << " não é uma relacao valida."
-                << std::endl;
+    output_file << "Erro Sintático: " << token.get_value()
+                << " não é uma relacao valida." << std::endl;
     return;
   }
 
-  output_file << token << std::endl;
   token = get_token();
 }
 
@@ -510,8 +512,6 @@ void Parser::expressao() {
  */
 void Parser::op_un() {
   if (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    output_file << token << std::endl;
-
     token = get_token();
     return;
   }
@@ -522,8 +522,6 @@ void Parser::op_un() {
  */
 void Parser::outros_termos() {
   while (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    output_file << token << std::endl;
-
     token = get_token();
     termo();
   }
@@ -535,14 +533,11 @@ void Parser::outros_termos() {
  */
 void Parser::op_ad() {
   if (token.get_type() == "simb_plus" || token.get_type() == "simb_minus") {
-    output_file << token << std::endl;
     token = get_token();
     return;
   } else {
-    output_file << "Erro sintático na linha " +
-                       std::to_string(token.get_line()) + " : "
-                << token.get_value() << " não é uma operacao valida."
-                << std::endl;
+    output_file << "Erro Sintático: " << token.get_value()
+                << " não é uma operacao valida." << std::endl;
   }
 }
 
@@ -561,7 +556,6 @@ void Parser::termo() {
 void Parser::mais_fatores() {
   while (token.get_type() == "simb_multiply" ||
          token.get_type() == "simb_divide") {
-    output_file << token << std::endl;
     token = get_token();
     fator();
   }
@@ -573,14 +567,12 @@ void Parser::mais_fatores() {
 void Parser::op_mul() {
   if (token.get_type() != "simb_multiply" &&
       token.get_type() != "simb_divide") {
-    output_file << "Erro sintático na linha " +
-                       std::to_string(token.get_line()) + " : "
-                << token.get_value() << " não é uma operação valida."
-                << std::endl;
+    output_file << "Erro Sintático: " << token.get_value()
+                << " não é uma operação valida." << std::endl;
     token = get_token();
     return;
   }
-  output_file << token << std::endl;
+
   token = get_token();
 }
 
@@ -599,9 +591,8 @@ void Parser::fator() {
     expressao();
     match("simb_rpar");
   } else {
-    output_file << "Erro sintático na linha " +
-                       std::to_string(token.get_line()) + " : "
-                << token.get_value() << " não é um fator válido." << std::endl;
+    output_file << "Erro Sintático: " << token.get_value()
+                << " não é um fator válido." << std::endl;
     token = get_token();
     return;
   }
@@ -613,10 +604,8 @@ void Parser::fator() {
 void Parser::numero() {
   if (token.get_type() != "integer_number" &&
       token.get_type() != "real_number") {
-    output_file << "Erro sintático na linha " +
-                       std::to_string(token.get_line()) + " : "
-                << token.get_value() << " não é número real ou inteiro."
-                << std::endl;
+    output_file << "Erro Sintático: " << token.get_value()
+                << " não é número real ou inteiro." << std::endl;
     return;
   }
 
@@ -643,11 +632,10 @@ Parser::~Parser() { file.close(); }
 Token Parser::get_token() {
   if (lexical.should_go_back()) {
     std::optional<Token> token{};
-    token = lexical.next(c, line_number);
+    token = lexical.next(c);
     if (token) {
       if (!token.value().get_type().find("Erro Léxico")) {
-        output_file << "Erro na linha " << token.value().get_line() << ": "
-                    << token.value().get_type() << std::endl;
+        output_file << token.value().get_type() << std::endl;
         flag_lex = true;
         flag_err = true;
       } else {
@@ -660,14 +648,13 @@ Token Parser::get_token() {
 
   while (file >> std::noskipws >> c) {
     std::optional<Token> token{};
-    token = lexical.next(c, line_number);
+    token = lexical.next(c);
 
     if (token) {
       if (!token.value().get_type().find("Erro Léxico")) {
         flag_lex = true;
         flag_err = true;
-        output_file << "Erro na linha " << line_number << ": "
-                    << token.value().get_type() << std::endl;
+        output_file << token.value().get_type() << std::endl;
       } else
         flag_lex = false;
       return token.value();
@@ -682,7 +669,6 @@ Token Parser::get_token() {
  */
 void Parser::parse() {
   output_file.open("output.txt");
-  line_number = 1;
 
   token = get_token();
   programa();
